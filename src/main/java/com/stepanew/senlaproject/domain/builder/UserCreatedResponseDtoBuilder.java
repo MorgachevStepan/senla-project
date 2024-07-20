@@ -1,6 +1,7 @@
 package com.stepanew.senlaproject.domain.builder;
 
 import com.stepanew.senlaproject.domain.dto.response.UserCreatedResponseDto;
+import com.stepanew.senlaproject.domain.entity.User;
 
 public class UserCreatedResponseDtoBuilder {
 
@@ -13,33 +14,43 @@ public class UserCreatedResponseDtoBuilder {
     public UserCreatedResponseDtoBuilder() {
     }
 
-    public UserCreatedResponseDtoBuilder id(Long id) {
+    private UserCreatedResponseDtoBuilder id(Long id) {
         this.id = id;
         return this;
     }
 
-    public UserCreatedResponseDtoBuilder email(String email) {
+    private UserCreatedResponseDtoBuilder email(String email) {
         this.email = email;
         return this;
     }
 
-    public UserCreatedResponseDtoBuilder firstName(String firstName) {
+    private UserCreatedResponseDtoBuilder firstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
 
-    public UserCreatedResponseDtoBuilder lastName(String lastName) {
+    private UserCreatedResponseDtoBuilder lastName(String lastName) {
         this.lastName = lastName;
         return this;
     }
 
-    public UserCreatedResponseDtoBuilder patronymic(String patronymic) {
+    private UserCreatedResponseDtoBuilder patronymic(String patronymic) {
         this.patronymic = patronymic;
         return this;
     }
 
-    public UserCreatedResponseDto build() {
+    private UserCreatedResponseDto build() {
         return new UserCreatedResponseDto(id, email, firstName, lastName, patronymic);
+    }
+
+    public UserCreatedResponseDto buildUserCreatedResponseDto(User user) {
+        return new UserCreatedResponseDtoBuilder()
+                .firstName(user.getProfile().getFirstName())
+                .lastName(user.getProfile().getLastName())
+                .patronymic(user.getProfile().getPatronymic())
+                .id(user.getId())
+                .email(user.getEmail())
+                .build();
     }
 
 }

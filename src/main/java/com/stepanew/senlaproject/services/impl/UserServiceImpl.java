@@ -1,8 +1,11 @@
 package com.stepanew.senlaproject.services.impl;
 
 import com.stepanew.senlaproject.domain.builder.UserCreatedResponseDtoBuilder;
+import com.stepanew.senlaproject.domain.builder.UserUpdateMeResponseDtoBuilder;
 import com.stepanew.senlaproject.domain.dto.request.UserCreateRequestDto;
+import com.stepanew.senlaproject.domain.dto.request.UserUpdateMeRequestDto;
 import com.stepanew.senlaproject.domain.dto.response.UserCreatedResponseDto;
+import com.stepanew.senlaproject.domain.dto.response.UserUpdateMeResponseDto;
 import com.stepanew.senlaproject.domain.entity.Profile;
 import com.stepanew.senlaproject.domain.entity.Role;
 import com.stepanew.senlaproject.domain.entity.User;
@@ -67,12 +70,41 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         return new UserCreatedResponseDtoBuilder()
-                .firstName(profile.getFirstName())
-                .lastName(profile.getLastName())
-                .patronymic(profile.getPatronymic())
-                .id(user.getId())
-                .email(user.getEmail())
-                .build();
+                .buildUserCreatedResponseDto(user);
+    }
+
+    @Override
+    public UserUpdateMeResponseDto updateMe(UserUpdateMeRequestDto request, String email) {
+        User updatedUser = getByEmail(email);
+        return update(updatedUser, request);
+    }
+
+    @Override
+    public UserUpdateMeResponseDto updateById(UserUpdateMeRequestDto request, Long id) {
+        User updatedUser = getById(id);
+
+        return update(updatedUser, request);
+    }
+
+    private UserUpdateMeResponseDto update(User updatedUser, UserUpdateMeRequestDto request) {
+        Profile profile = updatedUser.getProfile();
+
+        if (request.firstName() != null) {
+            profile.setFirstName(request.firstName());
+        }
+
+        if (request.lastName() != null) {
+            profile.setLastName(request.lastName());
+        }
+
+        if (request.patronymic() != null) {
+            profile.setPatronymic(request.patronymic());
+        }
+
+        userRepository.save(updatedUser);
+
+        return new UserUpdateMeResponseDtoBuilder()
+                .buildUserUpdateMeResponseDto(updatedUser);
     }
 
 }
