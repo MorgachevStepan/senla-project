@@ -11,6 +11,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @ToString
 @Table(name = "users")
 @Entity
@@ -21,9 +22,6 @@ public class User {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "username", unique = true)
-    private String username;
-
     @Column(name = "password")
     private String password;
 
@@ -32,16 +30,12 @@ public class User {
 
     @Column(name = "created_date")
     @JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
-    private LocalDateTime createdDate = LocalDateTime.now();
+    private LocalDateTime createdDate;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(joinColumns = @JoinColumn(name = "user_id"))
     @ToString.Exclude
-    private Set<Role> roles;
+    Set<Role> roles;
 
     @OneToOne(
             mappedBy = "user",
