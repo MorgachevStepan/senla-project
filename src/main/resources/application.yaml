@@ -12,6 +12,10 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: true
+  liquibase:
+    change-log: classpath:liquibase/db.changelog-master.xml
+    enabled: true
+    default-schema: public
 
 security:
   jwt:
