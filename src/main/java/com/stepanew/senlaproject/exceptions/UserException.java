@@ -8,7 +8,7 @@ public class UserException extends RuntimeException {
     @Getter
     public enum CODE {
 
-        NO_SUCH_USER("No user with such id");
+        NO_SUCH_USER("Нет пользователя с таким id");
 
         final String codeDescription;
 

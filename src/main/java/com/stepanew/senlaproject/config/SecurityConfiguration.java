@@ -1,11 +1,11 @@
 package com.stepanew.senlaproject.config;
 
+import com.stepanew.senlaproject.security.jwt.JwtAuthEntryPoint;
 import com.stepanew.senlaproject.security.jwt.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -24,15 +24,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor(onConstructor = @__(@Lazy))
 public class SecurityConfiguration {
 
-    private static final String UNAUTHORIZED = "Unauthorized";
-
-    private static final String FORBIDDEN = "Forbidden";
-
     private final String[] WHITE_LIST_URL = {
             "/api/v1/auth/**"
     };
 
     private final JwtFilter jwtFilter;
+
+    private final JwtAuthEntryPoint jwtAuthEntryPoint;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -60,18 +58,8 @@ public class SecurityConfiguration {
                                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(
-                        configurer ->
-                                configurer.authenticationEntryPoint(
-                                                (request, response, authException) -> {
-                                                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                                                    response.getWriter().write(UNAUTHORIZED);
-                                                })
-                                        .accessDeniedHandler(
-                                                (request, response, accessDeniedException) -> {
-                                                    response.setStatus(HttpStatus.FORBIDDEN.value());
-                                                    response.getWriter().write(FORBIDDEN);
-                                                }
-                                        )
+                        configurer -> configurer
+                                .authenticationEntryPoint(jwtAuthEntryPoint)
                 )
                 .anonymous(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
