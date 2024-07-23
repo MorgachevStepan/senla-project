@@ -33,13 +33,13 @@ public class UserException extends RuntimeException {
         }
     }
 
-    protected final UserException.CODE code;
+    private final UserException.CODE code;
 
-    protected UserException(UserException.CODE code, String msg) {
+    private UserException(UserException.CODE code, String msg) {
         this(code, null, msg);
     }
 
-    protected UserException(UserException.CODE code, Throwable e, String msg) {
+    private UserException(UserException.CODE code, Throwable e, String msg) {
         super(msg, e);
         this.code = code;
     }

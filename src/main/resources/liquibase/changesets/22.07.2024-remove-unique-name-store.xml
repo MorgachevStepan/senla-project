@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="22072024135627" author="morgachev_stepan">
+        <addColumn tableName="stores" schemaName="public">
+            <column name="name_new" type="varchar(255)" valueComputed="name"/>
+        </addColumn>
+
+        <dropColumn tableName="stores" schemaName="public" columnName="name"/>
+
+        <renameColumn tableName="stores" schemaName="public" oldColumnName="name_new" newColumnName="name"/>
+    </changeSet>
+
+</databaseChangeLog>

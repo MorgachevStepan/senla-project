@@ -34,14 +34,15 @@ public class AuthException extends RuntimeException{
         }
     }
 
-    protected final AuthException.CODE code;
+    private final AuthException.CODE code;
 
-    protected AuthException(AuthException.CODE code, String msg) {
+    private AuthException(AuthException.CODE code, String msg) {
         this(code, null, msg);
     }
 
-    protected AuthException(AuthException.CODE code, Throwable e, String msg) {
+    private AuthException(AuthException.CODE code, Throwable e, String msg) {
         super(msg, e);
         this.code = code;
     }
+
 }

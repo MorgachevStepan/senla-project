@@ -19,7 +19,7 @@ public class Store {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     private String name;
 
     @Column(name = "number")

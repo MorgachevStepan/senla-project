@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> updateById(
             @PathVariable Long id,
             @RequestBody @Validated UserUpdateMeRequestDto request

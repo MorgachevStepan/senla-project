@@ -21,7 +21,7 @@ security:
   jwt:
     access:
       secret: ajEyLXNkZixuaGwuem5hZm5mc2dzZnNmc2cyMzR5aHNubXBdLQ==
-      time: 5
+      time: 500
     refresh:
       secret: LTBpMzQ1ZGZzam52eCxjdiB3cGVrZnNmbHZuZGZnZ2Y=
       time: 30

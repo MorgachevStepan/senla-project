@@ -1,17 +1,27 @@
 package com.stepanew.senlaproject.controller.handler;
 
 import com.stepanew.senlaproject.exceptions.AuthException;
+import com.stepanew.senlaproject.exceptions.StoreException;
 import com.stepanew.senlaproject.exceptions.UserException;
 import com.stepanew.senlaproject.exceptions.message.ErrorMessage;
+import com.stepanew.senlaproject.exceptions.message.ValidationErrorMessage;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static com.stepanew.senlaproject.utils.StringUtil.trimToFirstDot;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @Slf4j
@@ -58,11 +68,70 @@ public class ExceptionHandler {
                 .body(new ErrorMessage(HttpStatus.UNAUTHORIZED.name(), e.getMessage()));
     }
 
+    @org.springframework.web.bind.annotation.ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ValidationErrorMessage> handleValidationException(MethodArgumentNotValidException e) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        String codeStr = "INCORRECT_INPUT";
+
+        Map<String, String> errors = e.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .collect(Collectors.toMap(
+                        FieldError::getField,
+                        FieldError::getDefaultMessage
+                ));
+
+        ValidationErrorMessage errorMessage = new ValidationErrorMessage(
+                codeStr,
+                "Validation failed",
+                errors
+        );
+
+        return ResponseEntity
+                .status(status)
+                .body(errorMessage);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ValidationErrorMessage> handleConstraintViolationException(ConstraintViolationException e) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        String codeStr = "INCORRECT_INPUT";
+
+        Map<String, String> errors = e.getConstraintViolations()
+                .stream()
+                .collect(Collectors.toMap(
+                        violation -> trimToFirstDot(violation.getPropertyPath().toString()),
+                        ConstraintViolation::getMessage
+                ));
+
+        ValidationErrorMessage errorMessage = new ValidationErrorMessage(
+                codeStr,
+                "Validation failed",
+                errors
+        );
+
+        return ResponseEntity
+                .status(status)
+                .body(errorMessage);
+    }
+
     @org.springframework.web.bind.annotation.ExceptionHandler(UserException.class)
     public ResponseEntity<ErrorMessage> handleUserException(UserException e) {
         UserException.CODE code = e.getCode();
         HttpStatus status = switch (code) {
             case NO_SUCH_USER -> HttpStatus.NOT_FOUND;
+        };
+        String codeStr = code.toString();
+        return ResponseEntity
+                .status(status)
+                .body(new ErrorMessage(codeStr, e.getMessage()));
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(StoreException.class)
+    public ResponseEntity<ErrorMessage> handleStoreException(StoreException e) {
+        StoreException.CODE code = e.getCode();
+        HttpStatus status = switch (code) {
+            case NO_SUCH_STORE -> HttpStatus.NOT_FOUND;
         };
         String codeStr = code.toString();
         return ResponseEntity
