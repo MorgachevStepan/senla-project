@@ -1,6 +1,7 @@
 package com.stepanew.senlaproject.controller.handler;
 
 import com.stepanew.senlaproject.exceptions.AuthException;
+import com.stepanew.senlaproject.exceptions.CategoryException;
 import com.stepanew.senlaproject.exceptions.StoreException;
 import com.stepanew.senlaproject.exceptions.UserException;
 import com.stepanew.senlaproject.exceptions.message.ErrorMessage;
@@ -132,6 +133,19 @@ public class ExceptionHandler {
         StoreException.CODE code = e.getCode();
         HttpStatus status = switch (code) {
             case NO_SUCH_STORE -> HttpStatus.NOT_FOUND;
+        };
+        String codeStr = code.toString();
+        return ResponseEntity
+                .status(status)
+                .body(new ErrorMessage(codeStr, e.getMessage()));
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(CategoryException.class)
+    public ResponseEntity<ErrorMessage> handleCategoryException(CategoryException e) {
+        CategoryException.CODE code = e.getCode();
+        HttpStatus status = switch (code) {
+            case NO_SUCH_CATEGORY -> HttpStatus.NOT_FOUND;
+            case NAME_IN_USE -> HttpStatus.CONFLICT;
         };
         String codeStr = code.toString();
         return ResponseEntity
