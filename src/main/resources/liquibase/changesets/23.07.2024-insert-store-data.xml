@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="23072024151629" author="morgachev_stepan">
+        <insert tableName="stores">
+            <column name="id" value="1"/>
+            <column name="name" value="Пятёрочка"/>
+            <column name="number" value="88005553535"/>
+            <column name="address" value="Нижний Новгород, улица Радужная, дом 2"/>
+        </insert>
+        <insert tableName="stores">
+            <column name="id" value="2"/>
+            <column name="name" value="Пятёрочка"/>
+            <column name="number" value="81234567890"/>
+            <column name="address" value="Нижний Новгород, улица Родионова, дом 23А"/>
+        </insert>
+        <insert tableName="stores">
+            <column name="id" value="3"/>
+            <column name="name" value="Пятёрочка"/>
+            <column name="number" value="80987654321"/>
+            <column name="address" value="Нижний Новгород, улица Бринского, дом 1А"/>
+        </insert>
+        <insert tableName="stores">
+            <column name="id" value="4"/>
+            <column name="name" value="Хорошее дело"/>
+            <column name="number" value="89271836640"/>
+            <column name="address" value="Нижний Новгород, улица Родионова, дом 195"/>
+        </insert>
+        <insert tableName="stores">
+            <column name="id" value="5"/>
+            <column name="name" value="Магнит"/>
+            <column name="number" value="88002009002"/>
+            <column name="address" value="Нижний Новгород, улица Германа Лопатина, дом 6Б"/>
+        </insert>
+        <insert tableName="stores">
+            <column name="id" value="6"/>
+            <column name="name" value="Smart"/>
+            <column name="number" value="89302735550"/>
+            <column name="address" value="Нижний Новгород, улица Германа Лопатина, дом 6Б"/>
+        </insert>
+        <insert tableName="stores">
+            <column name="id" value="7"/>
+            <column name="name" value="Сытная лавка"/>
+            <column name="address" value="Нижний Новгород, улица Верхне-Печерская"/>
+        </insert>
+        <insert tableName="stores">
+            <column name="id" value="8"/>
+            <column name="name" value="Eurospar"/>
+            <column name="number" value="88005001329"/>
+            <column name="address" value="Нижний Новгород, улица Казанское шоссе, дом 11"/>
+        </insert>
+        <insert tableName="stores">
+            <column name="id" value="9"/>
+            <column name="name" value="Фрукты и овощи"/>
+            <column name="address" value="Нижний Новгород, улица Германа Лопатина, дом 3Б"/>
+        </insert>
+        <insert tableName="stores">
+            <column name="id" value="10"/>
+            <column name="name" value="Красное и Белое"/>
+            <column name="number" value="89227033000"/>
+            <column name="address" value="Нижний Новгород, улица Родионова, дом 189/24"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
