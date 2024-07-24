@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.security.Principal;
 
 @Validated
 @RestController
@@ -80,8 +81,11 @@ public class ProductController {
 
     @PostMapping("/")
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> createProduct(@RequestBody @Validated ProductCreateRequestDto request) {
-        ProductResponseDto response = productService.create(request);
+    public ResponseEntity<?> createProduct(
+            @RequestBody @Validated ProductCreateRequestDto request,
+            Principal principal
+    ) {
+        ProductResponseDto response = productService.create(request, principal.getName());
 
         return ResponseEntity
                 .created(URI.create("/api/v1/product/" + response.id()))
@@ -90,8 +94,8 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
-        productService.delete(id);
+    public ResponseEntity<?> deleteProduct(@PathVariable Long id, Principal principal) {
+        productService.delete(id, principal.getName());
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
@@ -99,10 +103,13 @@ public class ProductController {
 
     @PutMapping("/")
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> updateProduct(@RequestBody @Validated ProductUpdateRequestDto request) {
+    public ResponseEntity<?> updateProduct(
+            @RequestBody @Validated ProductUpdateRequestDto request,
+            Principal principal
+    ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(productService.update(request));
+                .body(productService.update(request, principal.getName()));
     }
 
     @PostMapping("/price/")

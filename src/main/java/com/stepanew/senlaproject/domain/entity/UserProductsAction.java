@@ -11,10 +11,11 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @ToString
 @Table(name = "user_products_actions")
 @Entity
-public class UserProductsActions {
+public class UserProductsAction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

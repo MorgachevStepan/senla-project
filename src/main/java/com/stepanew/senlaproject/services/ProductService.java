@@ -15,13 +15,13 @@ public interface ProductService {
     ProductResponseDto findById(Long id);
 
     @Transactional(readOnly = false)
-    ProductResponseDto create(ProductCreateRequestDto request);
+    ProductResponseDto create(ProductCreateRequestDto request, String email);
 
     @Transactional(readOnly = false)
-    void delete(Long id);
+    void delete(Long id, String email);
 
     @Transactional(readOnly = false)
-    ProductResponseDto update(ProductUpdateRequestDto request);
+    ProductResponseDto update(ProductUpdateRequestDto request, String email);
 
     @Transactional(readOnly = true)
     Page<ProductResponseDto> findAll(Pageable pageable, String name, Long categoryId);
