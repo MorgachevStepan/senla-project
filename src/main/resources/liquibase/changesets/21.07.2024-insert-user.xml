@@ -5,13 +5,11 @@
 
     <changeSet id="21072024142724" author="morgachev_stepan">
         <insert tableName="users">
-            <column name="id" value="1"/>
             <column name="email" value="admin@amdin.com"/>
             <column name="password" value="$2a$10$OonPNuq638N5nwsjr6xqk.H5D1.3G3O28k5Pi1GJIke1AkK4.p8uG"/>
             <column name="created_date" value="2024-07-21 14:26:35.534565"/>
         </insert>
         <insert tableName="users">
-            <column name="id" value="2"/>
             <column name="email" value="test@test.com"/>
             <column name="password" value="$2a$10$O129c6DEgGCGEHG7TmwaBOGwScOQIX9jSDY/u/939XIWX6JvsGI1i"/>
             <column name="created_date" value="2024-07-21 14:30:50.462063"/>

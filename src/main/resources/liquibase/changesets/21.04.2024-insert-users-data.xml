@@ -5,14 +5,12 @@
 
     <changeSet id="21072024143734" author="morgachev_stepan">
         <insert tableName="profiles">
-            <column name="id" value="1"/>
             <column name="user_id" value="1"/>
             <column name="first_name" value="Admin"/>
             <column name="last_name" value="Admin"/>
             <column name="patronymic" value="Admin"/>
         </insert>
         <insert tableName="profiles">
-            <column name="id" value="2"/>
             <column name="user_id" value="2"/>
             <column name="first_name" value="Ivan"/>
             <column name="last_name" value="Ivanov"/>

@@ -5,11 +5,9 @@
 
     <changeSet id="21072024142356" author="morgachev_stepan">
         <insert tableName="roles">
-            <column name="id" value="1"/>
             <column name="name" value="ROLE_ADMIN"/>
         </insert>
         <insert tableName="roles">
-            <column name="id" value="2"/>
             <column name="name" value="ROLE_USER"/>
         </insert>
     </changeSet>

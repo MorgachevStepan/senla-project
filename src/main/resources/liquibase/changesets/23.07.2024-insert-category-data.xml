@@ -5,52 +5,42 @@
 
     <changeSet id="23072024230039" author="morgachev_stepan">
         <insert tableName="categories">
-            <column name="id" value="1"/>
             <column name="name" value="Фрукты, ягоды"/>
             <column name="description" value="В этой категории всевозможные фрукты и ягоды"/>
         </insert>
         <insert tableName="categories">
-            <column name="id" value="2"/>
             <column name="name" value="Орехи, сухофрукты"/>
             <column name="description" value="В этой категории всевозможные орехи и сухофрукты"/>
         </insert>
         <insert tableName="categories">
-            <column name="id" value="3"/>
             <column name="name" value="Сыр"/>
             <column name="description" value="В этой категории всевозможные сыры"/>
         </insert>
         <insert tableName="categories">
-            <column name="id" value="4"/>
             <column name="name" value="Хлеб, лаваш"/>
             <column name="description" value="В этой категории представлен хлеб и лаваш"/>
         </insert>
         <insert tableName="categories">
-            <column name="id" value="5"/>
             <column name="name" value="Мясо"/>
             <column name="description" value="Мяяяяяяяясо"/>
         </insert>
         <insert tableName="categories">
-            <column name="id" value="6"/>
             <column name="name" value="Колбаса, сосиски"/>
             <column name="description" value="В этой категории всевозможные колбасы и сосиски"/>
         </insert>
         <insert tableName="categories">
-            <column name="id" value="7"/>
             <column name="name" value="Рыба"/>
             <column name="description" value="В этой категории рыыыыыыба"/>
         </insert>
         <insert tableName="categories">
-            <column name="id" value="8"/>
             <column name="name" value="Шоколад, конфеты"/>
             <column name="description" value="Ну а кто не любит шоколад и конфеты?"/>
         </insert>
         <insert tableName="categories">
-            <column name="id" value="9"/>
             <column name="name" value="Чипсы, сухарики"/>
             <column name="description" value="В этой категории всевозможные чипсы и сухарики"/>
         </insert>
         <insert tableName="categories">
-            <column name="id" value="10"/>
             <column name="name" value="Кухня"/>
             <column name="description" value="Товары для кухни"/>
         </insert>
