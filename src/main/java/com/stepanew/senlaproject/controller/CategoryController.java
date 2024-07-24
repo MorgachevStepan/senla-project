@@ -16,6 +16,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+
 @RestController
 @Validated
 @RequestMapping("/api/v1/category")
@@ -73,9 +75,11 @@ public class CategoryController {
     @PostMapping("/")
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> createCategory(@RequestBody @Validated CategoryCreateRequestDto request) {
+        CategoryResponseDto response = categoryService.create(request);
+
         return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(categoryService.create(request));
+                .created(URI.create("/api/v1/category/" + response.id()))
+                .body(response);
     }
 
     @DeleteMapping("/{id}")

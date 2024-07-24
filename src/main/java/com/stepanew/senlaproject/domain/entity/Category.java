@@ -31,6 +31,7 @@ public class Category {
             cascade = CascadeType.REMOVE,
             orphanRemoval = true
     )
+    @ToString.Exclude
     private List<Product> products;
 
 }

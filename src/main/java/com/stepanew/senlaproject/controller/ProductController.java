@@ -1,10 +1,9 @@
 package com.stepanew.senlaproject.controller;
 
-
-import com.stepanew.senlaproject.domain.dto.request.StoreCreateRequestDto;
-import com.stepanew.senlaproject.domain.dto.request.StoreUpdateRequestDto;
-import com.stepanew.senlaproject.domain.dto.response.StoreResponseDto;
-import com.stepanew.senlaproject.services.StoreService;
+import com.stepanew.senlaproject.domain.dto.request.ProductCreateRequestDto;
+import com.stepanew.senlaproject.domain.dto.request.ProductUpdateRequestDto;
+import com.stepanew.senlaproject.domain.dto.response.ProductResponseDto;
+import com.stepanew.senlaproject.services.ProductService;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
@@ -21,39 +20,41 @@ import java.net.URI;
 
 @Validated
 @RestController
-@RequestMapping("/api/v1/store")
+@RequestMapping("/api/v1/product")
 @RequiredArgsConstructor
-public class StoreController {
+public class ProductController {
 
-    private final StoreService storeService;
+    private final ProductService productService;
 
     @GetMapping("/{id}")
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(storeService.findById(id));
+                .body(productService.findById(id));
     }
 
     @GetMapping("/")
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-    public ResponseEntity<?> getAll(
+    public ResponseEntity<?> getAllByCategory(
             @RequestParam(defaultValue = "0")
             @Min(value = 0L, message = "Page number can't be less than 0")
             Integer pageNumber,
             @RequestParam(defaultValue = "10")
             @Min(value = 1L, message = "Page limit can't be less than 1")
             Integer pageSize,
+            @RequestParam()
+            @Min(value = 1L, message = "CategoryID can't be less than 1")
+            Long categoryId,
             @RequestParam(required = false, defaultValue = "") String name,
-            @RequestParam(required = false, defaultValue = "") String address,
             @RequestParam(required = false, defaultValue = "id")
-            @Pattern(regexp = "(?i)id|name|address", message = "sortBy must be one of: id, name, address")
+            @Pattern(regexp = "(?i)id|name", message = "sortBy must be one of: id, name")
             String sortBy,
             @RequestParam(required = false, defaultValue = "ASC")
             @Pattern(regexp = "(?i)asc|desc", message = "sortDirection must be one of: asc, desc")
             String sortDirection
     ) {
-        Page<StoreResponseDto> response = storeService.findAll(
+        Page<ProductResponseDto> response = productService.findAll(
                 PageRequest.of(
                         pageNumber,
                         pageSize,
@@ -61,8 +62,9 @@ public class StoreController {
                         sortBy.toLowerCase()
                 ),
                 name,
-                address
+                categoryId
         );
+
 
         if (response.isEmpty()) {
             return ResponseEntity
@@ -77,17 +79,18 @@ public class StoreController {
 
     @PostMapping("/")
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> createStore(@RequestBody @Validated StoreCreateRequestDto request) {
-        StoreResponseDto response = storeService.create(request);
+    public ResponseEntity<?> createProduct(@RequestBody @Validated ProductCreateRequestDto request) {
+        ProductResponseDto response = productService.create(request);
+
         return ResponseEntity
-                .created(URI.create("/api/v1/store/" + response.id()))
+                .created(URI.create("/api/v1/product/" + response.id()))
                 .body(response);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> deleteStore(@PathVariable Long id) {
-        storeService.delete(id);
+    public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
+        productService.delete(id);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
@@ -95,10 +98,10 @@ public class StoreController {
 
     @PutMapping("/")
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> updateStore(@RequestBody @Validated StoreUpdateRequestDto request) {
+    public ResponseEntity<?> updateProduct(@RequestBody @Validated ProductUpdateRequestDto request) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(storeService.update(request));
+                .body(productService.update(request));
     }
 
 }

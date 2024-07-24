@@ -1,9 +1,6 @@
 package com.stepanew.senlaproject.controller.handler;
 
-import com.stepanew.senlaproject.exceptions.AuthException;
-import com.stepanew.senlaproject.exceptions.CategoryException;
-import com.stepanew.senlaproject.exceptions.StoreException;
-import com.stepanew.senlaproject.exceptions.UserException;
+import com.stepanew.senlaproject.exceptions.*;
 import com.stepanew.senlaproject.exceptions.message.ErrorMessage;
 import com.stepanew.senlaproject.exceptions.message.ValidationErrorMessage;
 import jakarta.validation.ConstraintViolation;
@@ -16,6 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -116,6 +114,23 @@ public class ExceptionHandler {
                 .body(errorMessage);
     }
 
+    @org.springframework.web.bind.annotation.ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorMessage> handleMissingServletRequestParameterException(
+            MissingServletRequestParameterException e
+    ) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        String codeStr = "MISSING_PARAMETER";
+
+        String message = String.format("Parameter '%s' is missing", e.getParameterName());
+
+        ErrorMessage errorMessage = new ErrorMessage(
+                codeStr,
+                message
+        );
+
+        return ResponseEntity.status(status).body(errorMessage);
+    }
+
     @org.springframework.web.bind.annotation.ExceptionHandler(UserException.class)
     public ResponseEntity<ErrorMessage> handleUserException(UserException e) {
         UserException.CODE code = e.getCode();
@@ -146,6 +161,20 @@ public class ExceptionHandler {
         HttpStatus status = switch (code) {
             case NO_SUCH_CATEGORY -> HttpStatus.NOT_FOUND;
             case NAME_IN_USE -> HttpStatus.CONFLICT;
+        };
+        String codeStr = code.toString();
+        return ResponseEntity
+                .status(status)
+                .body(new ErrorMessage(codeStr, e.getMessage()));
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(ProductException.class)
+    public ResponseEntity<ErrorMessage> handleProductException(ProductException e) {
+        ProductException.CODE code = e.getCode();
+        HttpStatus status = switch (code) {
+            case NO_SUCH_PRODUCT -> HttpStatus.NOT_FOUND;
+            case NAME_IN_USE -> HttpStatus.CONFLICT;
+            case TEA_POT -> HttpStatus.I_AM_A_TEAPOT;
         };
         String codeStr = code.toString();
         return ResponseEntity
