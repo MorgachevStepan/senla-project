@@ -1,5 +1,6 @@
 package com.stepanew.senlaproject.controller;
 
+import com.stepanew.senlaproject.domain.dto.request.PriceCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductUpdateRequestDto;
 import com.stepanew.senlaproject.domain.dto.response.ProductResponseDto;
@@ -102,6 +103,14 @@ public class ProductController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(productService.update(request));
+    }
+
+    @PostMapping("/price/")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> addPriceToProduct(@RequestBody @Validated PriceCreateRequestDto request) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(productService.addPrice(request));
     }
 
 }

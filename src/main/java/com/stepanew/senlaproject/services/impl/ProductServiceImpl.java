@@ -1,21 +1,33 @@
 package com.stepanew.senlaproject.services.impl;
 
+import com.stepanew.senlaproject.domain.dto.request.PriceCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductUpdateRequestDto;
+import com.stepanew.senlaproject.domain.dto.response.PriceResponseDto;
 import com.stepanew.senlaproject.domain.dto.response.ProductResponseDto;
 import com.stepanew.senlaproject.domain.entity.Category;
+import com.stepanew.senlaproject.domain.entity.Price;
 import com.stepanew.senlaproject.domain.entity.Product;
+import com.stepanew.senlaproject.domain.entity.Store;
+import com.stepanew.senlaproject.domain.mapper.price.PriceCreateRequestDtoMapper;
+import com.stepanew.senlaproject.domain.mapper.price.PriceResponseDtoMapper;
 import com.stepanew.senlaproject.domain.mapper.product.ProductCreateRequestDtoMapper;
 import com.stepanew.senlaproject.domain.mapper.product.ProductResponseDtoMapper;
 import com.stepanew.senlaproject.exceptions.CategoryException;
 import com.stepanew.senlaproject.exceptions.ProductException;
+import com.stepanew.senlaproject.exceptions.StoreException;
 import com.stepanew.senlaproject.repository.CategoryRepository;
+import com.stepanew.senlaproject.repository.PriceRepository;
 import com.stepanew.senlaproject.repository.ProductRepository;
+import com.stepanew.senlaproject.repository.StoreRepository;
 import com.stepanew.senlaproject.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -27,9 +39,17 @@ public class ProductServiceImpl implements ProductService {
 
     private final CategoryRepository categoryRepository;
 
+    private final StoreRepository storeRepository;
+
+    private final PriceRepository priceRepository;
+
     private final ProductResponseDtoMapper productResponseDtoMapper;
 
     private final ProductCreateRequestDtoMapper productCreateRequestDtoMapper;
+
+    private final PriceCreateRequestDtoMapper priceCreateRequestDtoMapper;
+
+    private final PriceResponseDtoMapper priceResponseDtoMapper;
 
     @Override
     public ProductResponseDto findById(Long id) {
@@ -95,6 +115,25 @@ public class ProductServiceImpl implements ProductService {
                 );
 
         return response.map(productResponseDtoMapper::toDto);
+    }
+
+    @Override
+    public PriceResponseDto addPrice(PriceCreateRequestDto request) {
+        Price price = priceCreateRequestDtoMapper.toEntity(request);
+        Product product = findProductById(request.productId());
+        Store store = storeRepository
+                .findById(request.storeId())
+                .orElseThrow(StoreException.CODE.NO_SUCH_STORE::get);
+
+        price.setCheckedDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        price.setProduct(product);
+        price.setStore(store);
+
+        store.getPrices().add(price);
+        product.getPrices().add(price);
+
+        return priceResponseDtoMapper
+                .toDto(priceRepository.save(price));
     }
 
     private void checkToUsingName(String request) {

@@ -35,6 +35,7 @@ public class Product {
             cascade = CascadeType.REMOVE,
             orphanRemoval = true
     )
+    @ToString.Exclude
     private List<Price> prices;
 
 }
