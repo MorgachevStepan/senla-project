@@ -11,4 +11,6 @@
     <include file="changesets/22.07.2024-remove-unique-name-store.xml" relativeToChangelogFile="true"/>
     <include file="changesets/23.07.2024-insert-store-data.xml" relativeToChangelogFile="true"/>
     <include file="changesets/23.07.2024-insert-category-data.xml" relativeToChangelogFile="true"/>
+    <include file="changesets/24.07.2024-insert-product-data.xml" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>

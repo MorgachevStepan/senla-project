@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="24072024161735" author="morgachev_stepan">
+        <insert tableName="products">
+            <column name="id" value="1"/>
+            <column name="category_id" value="1"/>
+            <column name="name" value="Яблоко"/>
+            <column name="description" value="Свежие яблоки, 1 кг"/>
+        </insert>
+        <insert tableName="products">
+            <column name="id" value="2"/>
+            <column name="category_id" value="1"/>
+            <column name="name" value="Банан"/>
+            <column name="description" value="Спелые бананы, 1 кг"/>
+        </insert>
+        <insert tableName="products">
+            <column name="id" value="3"/>
+            <column name="category_id" value="2"/>
+            <column name="name" value="Грецкий орех"/>
+            <column name="description" value="Орехи грецкие очищенные, 1 кг"/>
+        </insert>
+        <insert tableName="products">
+            <column name="id" value="4"/>
+            <column name="category_id" value="2"/>
+            <column name="name" value="Изюм"/>
+            <column name="description" value="Изюм без косточек, 1 кг"/>
+        </insert>
+        <insert tableName="products">
+            <column name="id" value="5"/>
+            <column name="category_id" value="3"/>
+            <column name="name" value="Гауда"/>
+            <column name="description" value="Сыр Гауда, 45% жирности, 1 кг"/>
+        </insert>
+        <insert tableName="products">
+            <column name="id" value="6"/>
+            <column name="category_id" value="3"/>
+            <column name="name" value="Бри"/>
+            <column name="description" value="Сыр Бри, мягкий, 1 кг"/>
+        </insert>
+        <insert tableName="products">
+            <column name="id" value="7"/>
+            <column name="category_id" value="4"/>
+            <column name="name" value="Багет"/>
+            <column name="description" value="Свежий багет, 1 шт"/>
+        </insert>
+        <insert tableName="products">
+            <column name="id" value="8"/>
+            <column name="category_id" value="4"/>
+            <column name="name" value="Лаваш"/>
+            <column name="description" value="Традиционный лаваш, 1 шт"/>
+        </insert>
+        <insert tableName="products">
+            <column name="id" value="9"/>
+            <column name="category_id" value="5"/>
+            <column name="name" value="Говядина"/>
+            <column name="description" value="Говядина, охлажденная, 1 кг"/>
+        </insert>
+        <insert tableName="products">
+            <column name="id" value="10"/>
+            <column name="category_id" value="5"/>
+            <column name="name" value="Свинина"/>
+            <column name="description" value="Свинина, охлажденная, 1 кг"/>
+        </insert>
+        <insert tableName="products">
+            <column name="id" value="11"/>
+            <column name="category_id" value="6"/>
+            <column name="name" value="Сосиски Молочные"/>
+            <column name="description" value="Сосиски с молоком, 1 упаковка"/>
+        </insert>
+        <insert tableName="products">
+            <column name="id" value="12"/>
+            <column name="category_id" value="6"/>
+            <column name="name" value="Колбаса Докторская"/>
+            <column name="description" value="Докторская колбаса, 1 кг"/>
+        </insert>
+        <insert tableName="products">
+            <column name="id" value="13"/>
+            <column name="category_id" value="7"/>
+            <column name="name" value="Форель"/>
+            <column name="description" value="Свежая форель, 1 кг"/>
+        </insert>
+        <insert tableName="products">
+            <column name="id" value="14"/>
+            <column name="category_id" value="7"/>
+            <column name="name" value="Лосось"/>
+            <column name="description" value="Свежий лосось, 1 кг"/>
+        </insert>
+        <insert tableName="products">
+            <column name="id" value="15"/>
+            <column name="category_id" value="8"/>
+            <column name="name" value="Молочный шоколад"/>
+            <column name="description" value="Шоколад молочный, 1 шт"/>
+        </insert>
+        <insert tableName="products">
+            <column name="id" value="16"/>
+            <column name="category_id" value="8"/>
+            <column name="name" value="Конфеты Трюфели"/>
+            <column name="description" value="Конфеты с трюфелем, 1 упаковка"/>
+        </insert>
+        <insert tableName="products">
+            <column name="id" value="17"/>
+            <column name="category_id" value="9"/>
+            <column name="name" value="Чипсы картофельные"/>
+            <column name="description" value="Картофельные чипсы с солью, 1 шт"/>
+        </insert>
+        <insert tableName="products">
+            <column name="id" value="18"/>
+            <column name="category_id" value="9"/>
+            <column name="name" value="Сухарики с чесноком"/>
+            <column name="description" value="Сухарики со вкусом чеснока, 1 шт"/>
+        </insert>
+        <insert tableName="products">
+            <column name="id" value="19"/>
+            <column name="category_id" value="10"/>
+            <column name="name" value="Сковорода"/>
+            <column name="description" value="Антипригарная сковорода, 1 шт"/>
+        </insert>
+        <insert tableName="products">
+            <column name="id" value="20"/>
+            <column name="category_id" value="10"/>
+            <column name="name" value="Кастрюля"/>
+            <column name="description" value="Кастрюля из нержавеющей стали, 1 шт"/>
+        </insert>
+        <insert tableName="products">
+            <column name="id" value="21"/>
+            <column name="category_id" value="10"/>
+            <column name="name" value="Чайник"/>
+            <column name="description" value="Обычный кухонный чайник, 1 шт"/>
+        </insert>
+
+    </changeSet>
+
+</databaseChangeLog>
