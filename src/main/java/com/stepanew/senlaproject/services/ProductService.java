@@ -3,11 +3,14 @@ package com.stepanew.senlaproject.services;
 import com.stepanew.senlaproject.domain.dto.request.PriceCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductUpdateRequestDto;
+import com.stepanew.senlaproject.domain.dto.response.PriceBatchUploadDto;
 import com.stepanew.senlaproject.domain.dto.response.PriceResponseDto;
+import com.stepanew.senlaproject.domain.dto.response.ProductBatchUploadDto;
 import com.stepanew.senlaproject.domain.dto.response.ProductResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface ProductService {
 
@@ -27,6 +30,12 @@ public interface ProductService {
     Page<ProductResponseDto> findAll(Pageable pageable, String name, Long categoryId);
 
     @Transactional(readOnly = false)
-    PriceResponseDto addPrice(PriceCreateRequestDto request);
+    PriceResponseDto addPrice(PriceCreateRequestDto request, String email);
+
+    @Transactional(readOnly = false)
+    ProductBatchUploadDto uploadProducts(MultipartFile file, String email);
+
+    @Transactional(readOnly = false)
+    PriceBatchUploadDto uploadPrices(MultipartFile file, String email);
 
 }

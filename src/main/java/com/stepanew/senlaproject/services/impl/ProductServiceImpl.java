@@ -3,7 +3,9 @@ package com.stepanew.senlaproject.services.impl;
 import com.stepanew.senlaproject.domain.dto.request.PriceCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductUpdateRequestDto;
+import com.stepanew.senlaproject.domain.dto.response.PriceBatchUploadDto;
 import com.stepanew.senlaproject.domain.dto.response.PriceResponseDto;
+import com.stepanew.senlaproject.domain.dto.response.ProductBatchUploadDto;
 import com.stepanew.senlaproject.domain.dto.response.ProductResponseDto;
 import com.stepanew.senlaproject.domain.entity.*;
 import com.stepanew.senlaproject.domain.enums.ActionType;
@@ -11,20 +13,28 @@ import com.stepanew.senlaproject.domain.mapper.price.PriceCreateRequestDtoMapper
 import com.stepanew.senlaproject.domain.mapper.price.PriceResponseDtoMapper;
 import com.stepanew.senlaproject.domain.mapper.product.ProductCreateRequestDtoMapper;
 import com.stepanew.senlaproject.domain.mapper.product.ProductResponseDtoMapper;
-import com.stepanew.senlaproject.exceptions.CategoryException;
-import com.stepanew.senlaproject.exceptions.ProductException;
-import com.stepanew.senlaproject.exceptions.StoreException;
-import com.stepanew.senlaproject.exceptions.UserException;
+import com.stepanew.senlaproject.exceptions.*;
 import com.stepanew.senlaproject.repository.*;
 import com.stepanew.senlaproject.services.ProductService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.UnsupportedFileFormatException;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -124,7 +134,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PriceResponseDto addPrice(PriceCreateRequestDto request) {
+    public PriceResponseDto addPrice(PriceCreateRequestDto request, String email) {
         Price price = priceCreateRequestDtoMapper.toEntity(request);
         Product product = findProductById(request.productId());
         Store store = storeRepository
@@ -138,8 +148,86 @@ public class ProductServiceImpl implements ProductService {
         store.getPrices().add(price);
         product.getPrices().add(price);
 
+        logUsersAction(email, product, ActionType.NEW_PRICED);
+
         return priceResponseDtoMapper
                 .toDto(priceRepository.save(price));
+    }
+
+    @Override
+    public ProductBatchUploadDto uploadProducts(MultipartFile file, String email) {
+        ProductBatchUploadDto response = new ProductBatchUploadDto(new ArrayList<>());
+
+        try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
+            Sheet sheet = workbook.getSheetAt(0);
+            for (Row row : sheet) {
+
+                if (row.getRowNum() == 0) {
+                    continue;
+                }
+
+                Category category = categoryRepository
+                        .findById((long) row.getCell(2).getNumericCellValue())
+                        .orElseThrow(CategoryException.CODE.NO_SUCH_CATEGORY::get);
+
+                Product product = Product
+                        .builder()
+                        .name(row.getCell(0).getStringCellValue())
+                        .description(row.getCell(1).getStringCellValue())
+                        .category(category)
+                        .build();
+
+                ProductCreateRequestDto request = productCreateRequestDtoMapper.toDto(product);
+
+                System.out.println(request.toString());
+
+                response
+                        .uploaded()
+                        .add(create(request, email));
+            }
+        } catch (IllegalStateException e) {
+            throw ParserException.CODE.WRONG_DATA_FORMAT.get();
+        } catch (UnsupportedFileFormatException e) {
+            throw ParserException.CODE.WRONG_FORMAT.get();
+        } catch (IOException e) {
+            throw ParserException.CODE.SOMETHING_WRONG.get();
+        }
+
+        return response;
+    }
+
+    @Override
+    public PriceBatchUploadDto uploadPrices(MultipartFile file, String email) {
+        PriceBatchUploadDto response = new PriceBatchUploadDto(new ArrayList<>());
+
+        try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
+            Sheet sheet = workbook.getSheetAt(0);
+            for (Row row : sheet) {
+
+                if (row.getRowNum() == 0) {
+                    continue;
+                }
+
+                PriceCreateRequestDto request = new PriceCreateRequestDto(
+                        (long) row.getCell(0).getNumericCellValue(),
+                        (long) row.getCell(1).getNumericCellValue(),
+                        BigDecimal.valueOf(row.getCell(2).getNumericCellValue())
+                );
+
+                response
+                        .uploaded()
+                        .add(addPrice(request, email));
+            }
+        } catch (IllegalStateException e) {
+            throw ParserException.CODE.WRONG_DATA_FORMAT.get();
+        } catch (UnsupportedFileFormatException e) {
+            log.error(e.toString());
+            throw ParserException.CODE.WRONG_FORMAT.get();
+        } catch (IOException e) {
+            throw ParserException.CODE.SOMETHING_WRONG.get();
+        }
+
+        return response;
     }
 
     private void logUsersAction(String email, Product product, ActionType actionType) {
@@ -149,8 +237,8 @@ public class ProductServiceImpl implements ProductService {
 
         UserProductsAction userProductsAction = UserProductsAction
                 .builder()
-                .user(user)
-                .product(product)
+                .email(user.getEmail())
+                .product(product.getName())
                 .actionType(actionType)
                 .actionDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
                 .build();

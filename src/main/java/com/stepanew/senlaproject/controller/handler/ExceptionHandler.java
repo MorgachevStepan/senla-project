@@ -182,4 +182,17 @@ public class ExceptionHandler {
                 .body(new ErrorMessage(codeStr, e.getMessage()));
     }
 
+    @org.springframework.web.bind.annotation.ExceptionHandler(ParserException.class)
+    public ResponseEntity<ErrorMessage> handleParserException(ParserException e) {
+        ParserException.CODE code = e.getCode();
+        HttpStatus status = switch (code) {
+            case WRONG_FORMAT, WRONG_DATA_FORMAT -> HttpStatus.BAD_REQUEST;
+            case SOMETHING_WRONG -> HttpStatus.INTERNAL_SERVER_ERROR;
+        };
+        String codeStr = code.toString();
+        return ResponseEntity
+                .status(status)
+                .body(new ErrorMessage(codeStr, e.getMessage()));
+    }
+
 }

@@ -22,13 +22,11 @@ public class UserProductsAction {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @Column(name = "email")
+    private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product product;
+    @Column(name = "product")
+    private String product;
 
     @Column(name = "action_type")
     @Enumerated(value = EnumType.STRING)

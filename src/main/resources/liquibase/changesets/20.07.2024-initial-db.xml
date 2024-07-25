@@ -97,10 +97,10 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="action_date" type="timestamp(6)"/>
-            <column name="product_id" type="bigint"/>
-            <column name="user_id" type="bigint"/>
+            <column name="product" type="varchar(255)"/>
+            <column name="email" type="varchar(255)"/>
             <column name="action_type" type="varchar(255)">
-                <constraints nullable="false" checkConstraint="action_type in ('DELETED','ADDED','EDITED')"/>
+                <constraints nullable="false" checkConstraint="action_type in ('DELETED','ADDED','EDITED, NEW_PRICED')"/>
             </column>
         </createTable>
     </changeSet>
@@ -144,12 +144,6 @@
                                  referencedTableName="categories" referencedColumnNames="id"/>
         <addForeignKeyConstraint baseTableName="profiles" baseColumnNames="user_id"
                                  constraintName="fk_profiles_user"
-                                 referencedTableName="users" referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="user_products_actions" baseColumnNames="product_id"
-                                 constraintName="fk_user_products_actions_product"
-                                 referencedTableName="products" referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="user_products_actions" baseColumnNames="user_id"
-                                 constraintName="fk_user_products_actions_user"
                                  referencedTableName="users" referencedColumnNames="id"/>
         <addForeignKeyConstraint baseTableName="users_roles" baseColumnNames="roles_id"
                                  constraintName="fk_users_roles_role"

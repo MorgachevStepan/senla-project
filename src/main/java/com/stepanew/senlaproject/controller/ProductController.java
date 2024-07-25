@@ -3,11 +3,14 @@ package com.stepanew.senlaproject.controller;
 import com.stepanew.senlaproject.domain.dto.request.PriceCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductUpdateRequestDto;
+import com.stepanew.senlaproject.domain.dto.response.PriceBatchUploadDto;
+import com.stepanew.senlaproject.domain.dto.response.ProductBatchUploadDto;
 import com.stepanew.senlaproject.domain.dto.response.ProductResponseDto;
 import com.stepanew.senlaproject.services.ProductService;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -16,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.security.Principal;
@@ -24,6 +28,7 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/api/v1/product")
 @RequiredArgsConstructor
+@Slf4j
 public class ProductController {
 
     private final ProductService productService;
@@ -112,12 +117,39 @@ public class ProductController {
                 .body(productService.update(request, principal.getName()));
     }
 
-    @PostMapping("/price/")
+    @PostMapping("/price")
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> addPriceToProduct(@RequestBody @Validated PriceCreateRequestDto request) {
+    public ResponseEntity<?> addPriceToProduct(
+            @RequestBody @Validated PriceCreateRequestDto request,
+            Principal principal
+    ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(productService.addPrice(request));
+                .body(productService.addPrice(request, principal.getName()));
+    }
+
+    @PostMapping("/batch")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> uploadProductsFile(
+            @RequestParam("file") MultipartFile file,
+            Principal principal
+    ) {
+        ProductBatchUploadDto response =  productService.uploadProducts(file, principal.getName());
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+
+    @PostMapping("/batch/price")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> uploadPricesFile(
+            @RequestParam("file") MultipartFile file,
+            Principal principal
+    ) {
+        PriceBatchUploadDto response =  productService.uploadPrices(file, principal.getName());
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
     }
 
 }

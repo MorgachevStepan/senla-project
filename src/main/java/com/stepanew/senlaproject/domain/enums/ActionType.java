@@ -6,6 +6,8 @@ public enum ActionType {
 
     ADDED,
 
-    EDITED
+    EDITED,
+
+    NEW_PRICED
 
 }
