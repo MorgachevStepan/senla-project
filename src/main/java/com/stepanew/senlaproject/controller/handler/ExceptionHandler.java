@@ -3,6 +3,7 @@ package com.stepanew.senlaproject.controller.handler;
 import com.stepanew.senlaproject.exceptions.*;
 import com.stepanew.senlaproject.exceptions.message.ErrorMessage;
 import com.stepanew.senlaproject.exceptions.message.ValidationErrorMessage;
+import com.stepanew.senlaproject.utils.StringUtil;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -83,6 +86,27 @@ public class ExceptionHandler {
         ValidationErrorMessage errorMessage = new ValidationErrorMessage(
                 codeStr,
                 "Validation failed",
+                errors
+        );
+
+        return ResponseEntity
+                .status(status)
+                .body(errorMessage);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(MethodArgumentTypeMismatchException .class)
+    public ResponseEntity<ValidationErrorMessage> handleMethodArgumentTypeMismatchException(
+            MethodArgumentTypeMismatchException e
+    ) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        String codeStr = "INCORRECT_INPUT";
+
+        Map<String, String> errors = new HashMap<>();
+        errors.put(e.getName(), StringUtil.shortenStringToSemicolon(e.getMessage()));
+
+        ValidationErrorMessage errorMessage = new ValidationErrorMessage(
+                codeStr,
+                "Validation failed: Incorrect argument type",
                 errors
         );
 

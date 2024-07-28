@@ -24,6 +24,10 @@
         <lombok.version>1.18.30</lombok.version>
         <liquibase.version>4.25.1</liquibase.version>
         <poi.version>5.2.3</poi.version>
+        <jfreechart.version>1.5.3</jfreechart.version>
+        <jcommon.version>1.0.24</jcommon.version>
+        <commons-io.version>2.11.0</commons-io.version>
+        <commons-compress.version>1.21</commons-compress.version>
     </properties>
 
     <dependencies>
@@ -149,16 +153,32 @@
             <version>${poi.version}</version>
         </dependency>
 
+        <!--commons-io-->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.11.0</version>
+            <version>${commons-io.version}</version>
         </dependency>
 
+        <!--commons-compress-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
-            <version>1.21</version> <!-- или последняя доступная версия -->
+            <version>${commons-compress.version}</version>
+        </dependency>
+
+        <!--jfreechart-->
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>${jfreechart.version}</version>
+        </dependency>
+
+        <!--jcommon-->
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jcommon</artifactId>
+            <version>${jcommon.version}</version>
         </dependency>
     </dependencies>
 
