@@ -34,7 +34,7 @@ public class PriceChartMaker extends ChartMaker<Price> {
     }
 
     @Override
-    String changeTitle(Price title) {
+    public String changeTitle(Price title) {
         return TITLE +
                 " на " +
                 title.getProduct().getName() +

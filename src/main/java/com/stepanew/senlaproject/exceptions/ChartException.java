@@ -8,7 +8,9 @@ public class ChartException extends RuntimeException {
     @Getter
     public enum CODE {
 
-        SOMETHING_WRONG("Что-то сломалось");
+        SOMETHING_WRONG("Что-то сломалось"),
+
+        UNIT_TOO_LARGE("Нет информации за такой промежуток времени");
 
         final String codeDescription;
 

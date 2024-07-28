@@ -17,4 +17,10 @@ public interface PriceRepository extends JpaRepository<Price, Long> {
             LocalDateTime endDate
     );
 
+    List<Price> findAllByProduct_IdAndCheckedDateBetween(
+            Long productId,
+            LocalDateTime startDate,
+            LocalDateTime endDate
+    );
+
 }

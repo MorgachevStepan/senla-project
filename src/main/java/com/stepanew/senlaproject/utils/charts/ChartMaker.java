@@ -33,14 +33,14 @@ public abstract class ChartMaker<T> {
 
     public abstract ByteArrayOutputStream createChart(java.util.List<T> data);
 
-    abstract String changeTitle(T title);
+    public abstract String changeTitle(T title);
 
     protected ByteArrayOutputStream useDataset(DefaultCategoryDataset dataset, String title) {
         initializeChart(dataset, title);
 
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         try {
-            ChartUtils.writeChartAsPNG(result, lineChart, 800, 600);
+            ChartUtils.writeChartAsPNG(result, lineChart, 1600, 600);
         } catch (IOException e) {
             throw ChartException.CODE.SOMETHING_WRONG.get();
         }

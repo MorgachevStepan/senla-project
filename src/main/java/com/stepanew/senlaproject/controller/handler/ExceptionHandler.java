@@ -219,4 +219,17 @@ public class ExceptionHandler {
                 .body(new ErrorMessage(codeStr, e.getMessage()));
     }
 
+    @org.springframework.web.bind.annotation.ExceptionHandler(ChartException.class)
+    public ResponseEntity<ErrorMessage> handleChartException(ChartException e) {
+        ChartException.CODE code = e.getCode();
+        HttpStatus status = switch (code) {
+            case UNIT_TOO_LARGE -> HttpStatus.BAD_REQUEST;
+            case SOMETHING_WRONG -> HttpStatus.INTERNAL_SERVER_ERROR;
+        };
+        String codeStr = code.toString();
+        return ResponseEntity
+                .status(status)
+                .body(new ErrorMessage(codeStr, e.getMessage()));
+    }
+
 }

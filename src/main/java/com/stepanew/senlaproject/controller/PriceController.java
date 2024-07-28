@@ -1,9 +1,9 @@
 package com.stepanew.senlaproject.controller;
 
 import com.stepanew.senlaproject.services.PriceService;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Validated
 @RestController
@@ -31,14 +32,46 @@ public class PriceController {
             @RequestParam Long storeId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_PNG);
         byte[] response = priceService.getPriceTrend(productId, storeId, startDate, endDate);
 
-        return new ResponseEntity<>(
-                response,
-                headers,
-                HttpStatus.OK);
+        if (response.length == 0) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .build();
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.IMAGE_PNG)
+                .body(response);
+    }
+
+    @GetMapping("/average")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public ResponseEntity<?> getAveragePriceByHour(
+            @RequestParam Long productId,
+            @RequestParam
+            @Pattern(regexp = "(?i)hours|years|months|days", message = "averageBy must be one of: hours, days, months, years")
+            String averageBy,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        byte[] response = priceService.getAveragePriceBy(
+                productId,
+                ChronoUnit.valueOf(averageBy.toUpperCase()),
+                startDate,
+                endDate
+        );
+
+        if (response.length == 0) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .build();
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.IMAGE_PNG)
+                .body(response);
     }
 
 }
