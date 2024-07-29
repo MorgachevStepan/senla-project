@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PriceRepository extends JpaRepository<Price, Long> {
@@ -21,6 +22,11 @@ public interface PriceRepository extends JpaRepository<Price, Long> {
             Long productId,
             LocalDateTime startDate,
             LocalDateTime endDate
+    );
+
+    Optional<Price> findTopByProduct_IdAndStore_IdOrderByCheckedDateDesc(
+            Long productId,
+            Long storeId
     );
 
 }

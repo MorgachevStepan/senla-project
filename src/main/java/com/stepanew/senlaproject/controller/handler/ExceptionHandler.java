@@ -232,4 +232,16 @@ public class ExceptionHandler {
                 .body(new ErrorMessage(codeStr, e.getMessage()));
     }
 
+    @org.springframework.web.bind.annotation.ExceptionHandler(PriceException.class)
+    public ResponseEntity<ErrorMessage> handlePriceException(PriceException e) {
+        PriceException.CODE code = e.getCode();
+        HttpStatus status = switch (code) {
+            case NO_SUCH_PRICE, EMPTY_DATA -> HttpStatus.BAD_REQUEST;
+        };
+        String codeStr = code.toString();
+        return ResponseEntity
+                .status(status)
+                .body(new ErrorMessage(codeStr, e.getMessage()));
+    }
+
 }

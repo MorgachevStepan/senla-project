@@ -1,6 +1,8 @@
 package com.stepanew.senlaproject.controller;
 
+import com.stepanew.senlaproject.domain.dto.response.PriceComparisonResponseDto;
 import com.stepanew.senlaproject.services.PriceService;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Validated
 @RestController
@@ -71,6 +74,28 @@ public class PriceController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .contentType(MediaType.IMAGE_PNG)
+                .body(response);
+    }
+
+    @GetMapping("/comparison")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public ResponseEntity<?> comparePrices(
+            @RequestParam
+            List<Long> productIds,
+            @RequestParam
+            @Min(value = 1L, message = "First store id must be more that 0")
+            Long firstStoreId,
+            @RequestParam()
+            @Min(value = 1L, message = "Second store id must be more that 0")
+            Long secondStoreId
+    ) {
+        PriceComparisonResponseDto response = priceService.comparePrices(
+                productIds,
+                firstStoreId,
+                secondStoreId
+        );
+        return ResponseEntity
+                .status(HttpStatus.OK)
                 .body(response);
     }
 
