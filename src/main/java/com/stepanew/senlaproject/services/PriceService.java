@@ -18,4 +18,7 @@ public interface PriceService {
     @Transactional(readOnly = true)
     PriceComparisonResponseDto comparePrices(List<Long> productId, Long firstStoreId, Long secondStoreId);
 
+    @Transactional(readOnly = true)
+    byte[] getPriceReport(Long productId, Long storeId, LocalDateTime startDate, LocalDateTime endDate);
+
 }

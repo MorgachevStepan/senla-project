@@ -4,15 +4,22 @@ import com.stepanew.senlaproject.domain.dto.response.ComparisonResponseDto;
 import com.stepanew.senlaproject.domain.dto.response.PriceComparisonResponseDto;
 import com.stepanew.senlaproject.domain.dto.response.StoreWithPriceResponseDto;
 import com.stepanew.senlaproject.domain.entity.Price;
+import com.stepanew.senlaproject.exceptions.ParserException;
 import com.stepanew.senlaproject.exceptions.PriceException;
 import com.stepanew.senlaproject.repository.PriceRepository;
 import com.stepanew.senlaproject.services.PriceService;
 import com.stepanew.senlaproject.utils.charts.ChartMaker;
 import com.stepanew.senlaproject.utils.charts.average.AveragePriceChartMaker;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -35,6 +42,16 @@ public class PriceServiceImpl implements PriceService {
             "В магазине %s по адресу %s дешевле чем в магазине %s по адресу %s на %.2f рублей или на %.2f процентов";
 
     private final static BigDecimal ONE_HUNDRED = new BigDecimal("100");
+
+    private final static String TITLE = "Price Dynamics";
+
+    private final static String FIRST_COLUMN_TITLE = "Date";
+
+    private final static String SECOND_COLUMN_TITLE = "Price";
+
+    private final static byte FIRST_COLUMN_NUM = 0;
+
+    private final static byte SECOND_COLUMN_NUM = 1;
 
     @Override
     public byte[] getPriceTrend(Long productId, Long storeId, LocalDateTime startDate, LocalDateTime endDate) {
@@ -102,6 +119,46 @@ public class PriceServiceImpl implements PriceService {
         }
 
         return response;
+    }
+
+    @Override
+    public byte[] getPriceReport(Long productId, Long storeId, LocalDateTime startDate, LocalDateTime endDate) {
+        List<Price> priceList = priceRepository.findAllByProduct_IdAndStore_IdAndCheckedDateBetween(
+                productId,
+                storeId,
+                startDate,
+                endDate
+        );
+
+        if (priceList.isEmpty()) {
+            return new byte[0];
+        }
+
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet(TITLE);
+
+            Row headerRow = sheet.createRow(0);
+            headerRow.createCell(FIRST_COLUMN_NUM).setCellValue(FIRST_COLUMN_TITLE);
+            headerRow.createCell(SECOND_COLUMN_NUM).setCellValue(SECOND_COLUMN_TITLE);
+
+            int rowNum = 1;
+            for (Price price : priceList) {
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(FIRST_COLUMN_NUM).setCellValue(price.getCheckedDate().toString());
+                row.createCell(SECOND_COLUMN_NUM).setCellValue(price.getPrice().doubleValue());
+            }
+
+            for (int i = 0; i < 2; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
+
+            return outputStream.toByteArray();
+        } catch (IOException e) {
+            throw ParserException.CODE.SOMETHING_WRONG.get();
+        }
     }
 
     private StoreWithPriceResponseDto getMaxPrice(

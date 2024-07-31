@@ -49,6 +49,27 @@ public class PriceController {
                 .body(response);
     }
 
+    @GetMapping("/report")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public ResponseEntity<?> getPriceReport(
+            @RequestParam Long productId,
+            @RequestParam Long storeId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        byte[] response = priceService.getPriceReport(productId, storeId, startDate, endDate);
+
+        if (response.length == 0) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .build();
+        }
+
+        return ResponseEntity.ok()
+                .contentLength(response.length)
+                .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                .body(response);
+    }
+
     @GetMapping("/average")
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<?> getAveragePriceByHour(
