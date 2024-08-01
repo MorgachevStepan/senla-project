@@ -7,7 +7,7 @@ import lombok.Data;
 @Schema(description = "Email и пароль")
 public class JwtRequest {
 
-    @Schema(description = "email пользователя", example = "example@example@com")
+    @Schema(description = "email пользователя", example = "test@test.com")
     private String email;
 
     @Schema(description = "пароль", example = "1234")

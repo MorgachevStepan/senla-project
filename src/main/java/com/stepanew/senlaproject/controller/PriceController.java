@@ -1,11 +1,13 @@
 package com.stepanew.senlaproject.controller;
 
+import com.stepanew.senlaproject.controller.api.PriceApi;
 import com.stepanew.senlaproject.domain.dto.response.PriceComparisonResponseDto;
 import com.stepanew.senlaproject.services.PriceService;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/price")
 @RequiredArgsConstructor
-public class PriceController {
+public class PriceController implements PriceApi {
 
     private final PriceService priceService;
 
@@ -67,12 +69,13 @@ public class PriceController {
         return ResponseEntity.ok()
                 .contentLength(response.length)
                 .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"report.xlsx\"")
                 .body(response);
     }
 
     @GetMapping("/average")
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-    public ResponseEntity<?> getAveragePriceByHour(
+    public ResponseEntity<?> getAveragePriceBy(
             @RequestParam Long productId,
             @RequestParam
             @Pattern(regexp = "(?i)hours|years|months|days", message = "averageBy must be one of: hours, days, months, years")
@@ -106,7 +109,7 @@ public class PriceController {
             @RequestParam
             @Min(value = 1L, message = "First store id must be more that 0")
             Long firstStoreId,
-            @RequestParam()
+            @RequestParam
             @Min(value = 1L, message = "Second store id must be more that 0")
             Long secondStoreId
     ) {
