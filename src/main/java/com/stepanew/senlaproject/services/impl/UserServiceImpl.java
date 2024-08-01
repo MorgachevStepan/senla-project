@@ -1,7 +1,6 @@
 package com.stepanew.senlaproject.services.impl;
 
 import com.stepanew.senlaproject.domain.builder.UserCreatedResponseDtoBuilder;
-import com.stepanew.senlaproject.domain.builder.UserUpdateMeResponseDtoBuilder;
 import com.stepanew.senlaproject.domain.dto.request.UserCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.UserUpdateMeRequestDto;
 import com.stepanew.senlaproject.domain.dto.response.UserCreatedResponseDto;
@@ -11,6 +10,7 @@ import com.stepanew.senlaproject.domain.entity.Role;
 import com.stepanew.senlaproject.domain.entity.User;
 import com.stepanew.senlaproject.domain.mapper.profile.CreateProfileRequestDtoMapper;
 import com.stepanew.senlaproject.domain.mapper.user.CreateUserRequestDtoMapper;
+import com.stepanew.senlaproject.domain.mapper.user.UserUpdateMeResponseDtoMapper;
 import com.stepanew.senlaproject.exceptions.AuthException;
 import com.stepanew.senlaproject.exceptions.UserException;
 import com.stepanew.senlaproject.repository.UserRepository;
@@ -31,6 +31,8 @@ public class UserServiceImpl implements UserService {
     private final CreateUserRequestDtoMapper createUserRequestDtoMapper;
 
     private final CreateProfileRequestDtoMapper createProfileRequestDtoMapper;
+
+    private final UserUpdateMeResponseDtoMapper userUpdateMeResponseDtoMapper;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -103,8 +105,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(updatedUser);
 
-        return new UserUpdateMeResponseDtoBuilder()
-                .buildUserUpdateMeResponseDto(updatedUser);
+        return userUpdateMeResponseDtoMapper.toDto(updatedUser);
     }
 
 }

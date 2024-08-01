@@ -1,5 +1,6 @@
 package com.stepanew.senlaproject.controller;
 
+import com.stepanew.senlaproject.controller.api.UserApi;
 import com.stepanew.senlaproject.domain.dto.request.UserUpdateMeRequestDto;
 import com.stepanew.senlaproject.domain.dto.response.UserUpdateMeResponseDto;
 import com.stepanew.senlaproject.services.UserService;
@@ -15,7 +16,7 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
-public class UserController {
+public class UserController implements UserApi {
 
     private final UserService userService;
 
