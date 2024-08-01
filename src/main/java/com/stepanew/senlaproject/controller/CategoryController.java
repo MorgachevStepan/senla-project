@@ -1,5 +1,6 @@
 package com.stepanew.senlaproject.controller;
 
+import com.stepanew.senlaproject.controller.api.CategoryApi;
 import com.stepanew.senlaproject.domain.dto.request.CategoryCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.CategoryUpdateRequestDto;
 import com.stepanew.senlaproject.domain.dto.response.CategoryResponseDto;
@@ -22,7 +23,7 @@ import java.net.URI;
 @Validated
 @RequestMapping("/api/v1/category")
 @RequiredArgsConstructor
-public class CategoryController {
+public class CategoryController implements CategoryApi {
 
     private final CategoryService categoryService;
 

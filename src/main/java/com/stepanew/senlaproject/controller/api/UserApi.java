@@ -1,8 +1,8 @@
 package com.stepanew.senlaproject.controller.api;
 
 import com.stepanew.senlaproject.domain.dto.request.UserUpdateMeRequestDto;
+import com.stepanew.senlaproject.domain.dto.response.UserUpdateMeResponseDto;
 import com.stepanew.senlaproject.exceptions.message.ErrorMessage;
-import com.stepanew.senlaproject.security.dto.JwtResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -25,7 +25,7 @@ public interface UserApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = JwtResponse.class)
+                                    schema = @Schema(implementation = UserUpdateMeResponseDto.class)
                             )
                     }
             ),
@@ -63,7 +63,7 @@ public interface UserApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = JwtResponse.class)
+                                    schema = @Schema(implementation = UserUpdateMeResponseDto.class)
                             )
                     }
             ),
