@@ -30,8 +30,18 @@ public interface UserApi {
                     }
             ),
             @ApiResponse(
+                    responseCode = "400",
+                    description = "Ошибка валидации входных данных - некоторый поля пустые или некорректные",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
                     responseCode = "401",
-                    description = "Неавторизирован",
+                    description = "Не авторизирован",
                     content = {
                             @Content(
                                     mediaType = "application/json",
@@ -64,6 +74,16 @@ public interface UserApi {
                             @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = UserUpdateMeResponseDto.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Ошибка валидации входных данных - некоторый поля пустые или некорректные",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     }
             ),

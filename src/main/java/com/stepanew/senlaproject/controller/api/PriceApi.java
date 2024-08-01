@@ -33,6 +33,16 @@ public interface PriceApi {
                     description = "Нет данных для создания графика"
             ),
             @ApiResponse(
+                    responseCode = "400",
+                    description = "Ошибка валидации входных данных - некоторый поля пустые",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
                     responseCode = "401",
                     description = "Не авторизирован",
                     content = {
@@ -69,6 +79,16 @@ public interface PriceApi {
                     description = "Нет данных для создания отчёта"
             ),
             @ApiResponse(
+                    responseCode = "400",
+                    description = "Ошибка валидации входных данных - некоторый поля пустые",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
                     responseCode = "401",
                     description = "Не авторизирован",
                     content = {
@@ -101,6 +121,16 @@ public interface PriceApi {
             @ApiResponse(
                     responseCode = "204",
                     description = "Нет данных для создания отчёта"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Ошибка валидации входных данных - некоторый поля пустые или некорректные",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
             ),
             @ApiResponse(
                     responseCode = "401",

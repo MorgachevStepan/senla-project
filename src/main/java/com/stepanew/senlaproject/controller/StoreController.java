@@ -1,6 +1,7 @@
 package com.stepanew.senlaproject.controller;
 
 
+import com.stepanew.senlaproject.controller.api.StoreApi;
 import com.stepanew.senlaproject.domain.dto.request.StoreCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.StoreUpdateRequestDto;
 import com.stepanew.senlaproject.domain.dto.response.StoreResponseDto;
@@ -23,7 +24,7 @@ import java.net.URI;
 @RestController
 @RequestMapping("/api/v1/store")
 @RequiredArgsConstructor
-public class StoreController {
+public class StoreController implements StoreApi {
 
     private final StoreService storeService;
 
