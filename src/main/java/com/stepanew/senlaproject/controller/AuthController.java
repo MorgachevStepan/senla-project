@@ -1,5 +1,6 @@
 package com.stepanew.senlaproject.controller;
 
+import com.stepanew.senlaproject.controller.api.AuthApi;
 import com.stepanew.senlaproject.domain.dto.request.JwtRefreshRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.UserCreateRequestDto;
 import com.stepanew.senlaproject.security.dto.JwtRequest;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController implements AuthApi {
 
     private final AuthService authService;
 

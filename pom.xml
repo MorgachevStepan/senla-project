@@ -28,6 +28,7 @@
         <jcommon.version>1.0.24</jcommon.version>
         <commons-io.version>2.11.0</commons-io.version>
         <commons-compress.version>1.21</commons-compress.version>
+        <openapi.verison>2.2.0</openapi.verison>
     </properties>
 
     <dependencies>
@@ -179,6 +180,13 @@
             <groupId>org.jfree</groupId>
             <artifactId>jcommon</artifactId>
             <version>${jcommon.version}</version>
+        </dependency>
+
+        <!--openapi-->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${openapi.verison}</version>
         </dependency>
     </dependencies>
 

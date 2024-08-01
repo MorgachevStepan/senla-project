@@ -1,9 +1,14 @@
 package com.stepanew.senlaproject.exceptions.message;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Стандартное описание ошибки")
 public record ErrorMessage(
 
+        @Schema(description = "Код ошибки", example = "NO_SUCH_EMAIL_OR_PASSWORD")
         String code,
 
+        @Schema(description = "Сообщение ошибки", example = "Неправильный email или пароль")
         String message
 
 ) {
