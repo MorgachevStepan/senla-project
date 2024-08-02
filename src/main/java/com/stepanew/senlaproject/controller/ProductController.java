@@ -129,7 +129,7 @@ public class ProductController implements ProductApi {
                 .body(productService.addPrice(request, principal.getName()));
     }
 
-    @PostMapping("/batch")
+    @PostMapping(value = "/batch", consumes = "multipart/form-data")
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> uploadProductsFile(
             @RequestParam("file") MultipartFile file,
@@ -141,7 +141,7 @@ public class ProductController implements ProductApi {
                 .body(response);
     }
 
-    @PostMapping("/batch/price")
+    @PostMapping(value = "/batch/price", consumes = "multipart/form-data")
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> uploadPricesFile(
             @RequestParam("file") MultipartFile file,

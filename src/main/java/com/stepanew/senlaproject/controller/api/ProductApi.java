@@ -415,7 +415,12 @@ public interface ProductApi {
     })
     @Operation(summary = "Пакетное добавление данных о продуктах")
     ResponseEntity<?> uploadProductsFile(
-            @RequestParam("file") MultipartFile file,
+            @Parameter(
+                    description = "Файл с данными о продуктах в формате XLSX",
+                    required = true,
+                    content = @Content(mediaType = "multipart/form-data")
+            )
+            MultipartFile file,
             Principal principal
     );
 
@@ -483,6 +488,11 @@ public interface ProductApi {
     })
     @Operation(summary = "Пакетное добавление данных о ценах на продукты")
     ResponseEntity<?> uploadPricesFile(
+            @Parameter(
+                    description = "Файл с данными о ценах в формате XLSX",
+                    required = true,
+                    content = @Content(mediaType = "multipart/form-data")
+            )
             @RequestParam("file") MultipartFile file,
             Principal principal
     );
