@@ -4,6 +4,7 @@ import com.stepanew.senlaproject.domain.dto.request.StoreCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.StoreUpdateRequestDto;
 import com.stepanew.senlaproject.domain.dto.response.StoreResponseDto;
 import com.stepanew.senlaproject.exceptions.message.ErrorMessage;
+import com.stepanew.senlaproject.exceptions.message.ValidationErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -37,7 +38,7 @@ public interface StoreApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation = ValidationErrorMessage.class)
                             )
                     }
             ),
@@ -85,7 +86,7 @@ public interface StoreApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation = ValidationErrorMessage.class)
                             )
                     }
             ),
@@ -141,7 +142,7 @@ public interface StoreApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation = ValidationErrorMessage.class)
                             )
                     }
             ),
@@ -182,7 +183,7 @@ public interface StoreApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation = ValidationErrorMessage.class)
                             )
                     }
             ),
@@ -230,7 +231,7 @@ public interface StoreApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation = ValidationErrorMessage.class)
                             )
                     }
             ),

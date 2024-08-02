@@ -179,8 +179,6 @@ public class ProductServiceImpl implements ProductService {
 
                 ProductCreateRequestDto request = productCreateRequestDtoMapper.toDto(product);
 
-                System.out.println(request.toString());
-
                 response
                         .uploaded()
                         .add(create(request, email));

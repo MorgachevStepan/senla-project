@@ -2,6 +2,7 @@ package com.stepanew.senlaproject.controller.api;
 
 import com.stepanew.senlaproject.domain.dto.response.PriceComparisonResponseDto;
 import com.stepanew.senlaproject.exceptions.message.ErrorMessage;
+import com.stepanew.senlaproject.exceptions.message.ValidationErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -38,7 +39,7 @@ public interface PriceApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation = ValidationErrorMessage.class)
                             )
                     }
             ),
@@ -84,7 +85,7 @@ public interface PriceApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation = ValidationErrorMessage.class)
                             )
                     }
             ),
@@ -128,7 +129,7 @@ public interface PriceApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation = ValidationErrorMessage.class)
                             )
                     }
             ),
@@ -170,7 +171,7 @@ public interface PriceApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation = ValidationErrorMessage.class)
                             )
                     }
             ),

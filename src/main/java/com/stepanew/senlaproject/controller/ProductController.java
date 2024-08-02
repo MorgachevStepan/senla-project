@@ -1,5 +1,6 @@
 package com.stepanew.senlaproject.controller;
 
+import com.stepanew.senlaproject.controller.api.ProductApi;
 import com.stepanew.senlaproject.domain.dto.request.PriceCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductUpdateRequestDto;
@@ -29,7 +30,7 @@ import java.security.Principal;
 @RequestMapping("/api/v1/product")
 @RequiredArgsConstructor
 @Slf4j
-public class ProductController {
+public class ProductController implements ProductApi {
 
     private final ProductService productService;
 

@@ -4,6 +4,7 @@ import com.stepanew.senlaproject.domain.dto.request.CategoryCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.CategoryUpdateRequestDto;
 import com.stepanew.senlaproject.domain.dto.response.CategoryResponseDto;
 import com.stepanew.senlaproject.exceptions.message.ErrorMessage;
+import com.stepanew.senlaproject.exceptions.message.ValidationErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -37,7 +38,7 @@ public interface CategoryApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation = ValidationErrorMessage.class)
                             )
                     }
             ),
@@ -89,7 +90,7 @@ public interface CategoryApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation = ValidationErrorMessage.class)
                             )
                     }
             ),
@@ -139,7 +140,7 @@ public interface CategoryApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation = ValidationErrorMessage.class)
                             )
                     }
             ),
@@ -190,7 +191,7 @@ public interface CategoryApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation = ValidationErrorMessage.class)
                             )
                     }
             ),
@@ -248,7 +249,7 @@ public interface CategoryApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation = ValidationErrorMessage.class)
                             )
                     }
             ),
