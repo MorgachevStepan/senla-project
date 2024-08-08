@@ -1,6 +1,5 @@
 package com.stepanew.senlaproject.services.impl;
 
-import com.stepanew.senlaproject.domain.builder.UserCreatedResponseDtoBuilder;
 import com.stepanew.senlaproject.domain.dto.request.UserCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.UserUpdateMeRequestDto;
 import com.stepanew.senlaproject.domain.dto.response.UserCreatedResponseDto;
@@ -9,7 +8,8 @@ import com.stepanew.senlaproject.domain.entity.Profile;
 import com.stepanew.senlaproject.domain.entity.Role;
 import com.stepanew.senlaproject.domain.entity.User;
 import com.stepanew.senlaproject.domain.mapper.profile.CreateProfileRequestDtoMapper;
-import com.stepanew.senlaproject.domain.mapper.user.CreateUserRequestDtoMapper;
+import com.stepanew.senlaproject.domain.mapper.user.UserCreateRequestDtoMapper;
+import com.stepanew.senlaproject.domain.mapper.user.UserCreateResponseDtoMapper;
 import com.stepanew.senlaproject.domain.mapper.user.UserUpdateMeResponseDtoMapper;
 import com.stepanew.senlaproject.exceptions.AuthException;
 import com.stepanew.senlaproject.exceptions.UserException;
@@ -28,11 +28,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final CreateUserRequestDtoMapper createUserRequestDtoMapper;
+    private final UserCreateRequestDtoMapper userCreateRequestDtoMapper;
 
     private final CreateProfileRequestDtoMapper createProfileRequestDtoMapper;
 
     private final UserUpdateMeResponseDtoMapper userUpdateMeResponseDtoMapper;
+
+    private final UserCreateResponseDtoMapper userCreateResponseDtoMapper;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -52,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserCreatedResponseDto create(UserCreateRequestDto request) {
-        User user = createUserRequestDtoMapper.toEntity(request);
+        User user = userCreateRequestDtoMapper.toEntity(request);
 
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw AuthException.CODE.EMAIL_IN_USE.get();
@@ -71,8 +73,7 @@ public class UserServiceImpl implements UserService {
         profile.setUser(user);
         userRepository.save(user);
 
-        return new UserCreatedResponseDtoBuilder()
-                .buildUserCreatedResponseDto(user);
+        return userCreateResponseDtoMapper.toDto(user);
     }
 
     @Override

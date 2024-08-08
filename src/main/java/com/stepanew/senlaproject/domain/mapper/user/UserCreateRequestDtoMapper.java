@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface CreateUserRequestDtoMapper extends EntityRequestMapper<UserCreateRequestDto, User> {
+public interface UserCreateRequestDtoMapper extends EntityRequestMapper<UserCreateRequestDto, User> {
 
     @Override
     @Mapping(target = "id", ignore = true)
