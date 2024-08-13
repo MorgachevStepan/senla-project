@@ -3,10 +3,12 @@ server:
   port: 8080
 
 spring:
+  config:
+    import: optional:file:.env[.properties]
   datasource:
-    url: jdbc:postgresql://localhost:5433/senla
-    username: postgres
-    password: 1234
+    url: jdbc:postgresql://${HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -20,8 +22,8 @@ spring:
 security:
   jwt:
     access:
-      secret: ajEyLXNkZixuaGwuem5hZm5mc2dzZnNmc2cyMzR5aHNubXBdLQ==
-      time: 500
+      secret: ${JWT_ACCESS_SECRET}
+      time: 1
     refresh:
-      secret: LTBpMzQ1ZGZzam52eCxjdiB3cGVrZnNmbHZuZGZnZ2Y=
+      secret: ${JWT_REFRESH_SECRET}
       time: 30
