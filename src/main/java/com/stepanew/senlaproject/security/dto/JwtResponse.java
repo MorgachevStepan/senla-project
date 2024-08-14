@@ -1,12 +1,14 @@
 package com.stepanew.senlaproject.security.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
 @Schema(description = "AccessToken и RefreshToken + email")
+@AllArgsConstructor
 public class JwtResponse {
 
     @Schema(description = "email", example = "example@example.com")
