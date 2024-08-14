@@ -48,7 +48,7 @@ class CategoryServiceImplTest {
     private final static String DEFAULT_DESCRIPTION = "DESCRIPTION";
 
     @Test
-    void findById() {
+    void findByIdTest() {
         Category category = createCategory();
         CategoryResponseDto expectedResponse = createCategoryResponseDto();
 
@@ -67,7 +67,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void findByIdThrowsException() {
+    void findByIdThrowsExceptionTest() {
         when(categoryRepository
                 .findById(DEFAULT_ID))
                 .thenReturn(Optional.empty());
@@ -78,7 +78,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void findAll() {
+    void findAllTest() {
         Pageable pageable = PageRequest.of(0, 10);
         Category category = createCategory();
         Page<Category> categoriesPage = new PageImpl<>(Collections.singletonList(category));
@@ -98,7 +98,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void delete() {
+    void deleteTest() {
         Category category = createCategory();
 
         when(categoryRepository
@@ -111,7 +111,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void deleteThrowsException() {
+    void deleteThrowsExceptionTest() {
         when(categoryRepository
                 .findById(DEFAULT_ID))
                 .thenReturn(Optional.empty());
@@ -122,7 +122,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void create() {
+    void createTest() {
         CategoryCreateRequestDto request = createCategoryCreateRequestDto();
         Category category = createCategory();
         CategoryResponseDto expectedResponse = createCategoryResponseDto();
@@ -142,7 +142,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void createThrowsExceptionWhenNameInUse() {
+    void createThrowsExceptionWhenNameInUseTest() {
         CategoryCreateRequestDto request = createCategoryCreateRequestDto();
         Category existingCategory = createCategory();
 
@@ -155,7 +155,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void update() {
+    void updateTest() {
         CategoryUpdateRequestDto request = createCategoryUpdateRequestDto();
         Category category = createCategory();
         CategoryResponseDto expectedResponse = createCategoryResponseDto();
@@ -175,7 +175,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void updateThrowsExceptionWhenCategoryNotFound() {
+    void updateThrowsExceptionWhenCategoryNotFoundTest() {
         CategoryUpdateRequestDto request = createCategoryUpdateRequestDto();
 
         when(categoryRepository.findById(DEFAULT_ID))
@@ -187,7 +187,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void updateThrowsExceptionWhenNameInUse() {
+    void updateThrowsExceptionWhenNameInUseTest() {
         CategoryUpdateRequestDto request = createCategoryUpdateRequestDto();
         Category category = createCategory();
         category.setId(DEFAULT_ID);

@@ -38,8 +38,11 @@ class AuthServiceImplTest {
     private AuthServiceImpl authService;
 
     private static final String DEFAULT_EMAIL = "test@example.com";
+
     private static final String DEFAULT_PASSWORD = "password";
+
     private static final String DEFAULT_REFRESH_TOKEN = "refresh_token";
+
     private static final String DEFAULT_ACCESS_TOKEN = "access_token";
 
     private static final String DEFAULT_FIRST_NAME = "Ivan";
@@ -47,6 +50,7 @@ class AuthServiceImplTest {
     private static final String DEFAULT_LAST_NAME = "Ivanov";
 
     private static final String DEFAULT_PATRONYMIC = "Ivanovich";
+
     private static final Long USER_ID = 1L;
 
     private User user;
@@ -60,7 +64,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void login() {
+    void loginTest() {
         JwtRequest loginRequest = new JwtRequest(DEFAULT_EMAIL, DEFAULT_PASSWORD);
 
         when(userService.getByEmail(DEFAULT_EMAIL)).thenReturn(user);
@@ -81,7 +85,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void refresh() {
+    void refreshTest() {
         JwtRefreshRequestDto refreshRequest = new JwtRefreshRequestDto(DEFAULT_REFRESH_TOKEN);
 
         when(jwtCore.validateRefreshToken(DEFAULT_REFRESH_TOKEN)).thenReturn(true);
@@ -105,7 +109,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void refreshThrowsException() {
+    void refreshThrowsExceptionTest() {
         JwtRefreshRequestDto refreshRequest = new JwtRefreshRequestDto(DEFAULT_REFRESH_TOKEN);
 
         when(jwtCore.validateRefreshToken(DEFAULT_REFRESH_TOKEN)).thenReturn(false);
@@ -118,7 +122,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void register() {
+    void registerTest() {
         UserCreateRequestDto registerRequest = new UserCreateRequestDto(
                 DEFAULT_FIRST_NAME,
                 DEFAULT_LAST_NAME,
@@ -156,7 +160,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void getAccessToken() {
+    void getAccessTokenTest() {
         JwtRefreshRequestDto refreshRequest = new JwtRefreshRequestDto(DEFAULT_REFRESH_TOKEN);
 
         when(jwtCore.validateRefreshToken(DEFAULT_REFRESH_TOKEN)).thenReturn(true);

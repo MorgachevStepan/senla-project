@@ -66,7 +66,7 @@ class UserServiceImplTest {
     private static final String ENCODED_PASSWORD = "encodedPassword";
 
     @Test
-    void getById() {
+    void getByIdTest() {
         User user = createUser();
 
         when(userRepository.findById(DEFAULT_ID))
@@ -79,7 +79,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void getByIdThrowsException() {
+    void getByIdThrowsExceptionTest() {
         when(userRepository.findById(DEFAULT_ID))
                 .thenReturn(Optional.empty());
 
@@ -88,7 +88,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void getByEmail() {
+    void getByEmailTest() {
         User user = createUser();
 
         when(userRepository.findByEmail(DEFAULT_EMAIL))
@@ -101,7 +101,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void getByEmailThrowsException() {
+    void getByEmailThrowsExceptionTest() {
         when(userRepository.findByEmail(DEFAULT_EMAIL))
                 .thenReturn(Optional.empty());
 
@@ -109,7 +109,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void create() {
+    void createTest() {
         UserCreateRequestDto request = createUserCreateRequestDto();
         User user = createUser();
         UserCreatedResponseDto response = createUserCreatedResponseDto();
@@ -139,7 +139,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void createThrowsExceptionWhenEmailInUse() {
+    void createThrowsExceptionWhenEmailInUseTest() {
         UserCreateRequestDto request = createUserCreateRequestDto();
         User existingUser = createUser();
 
@@ -152,7 +152,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void createThrowsExceptionWhenPasswordsDoNotMatch() {
+    void createThrowsExceptionWhenPasswordsDoNotMatchTest() {
         UserCreateRequestDto request = new UserCreateRequestDto(
                 DEFAULT_FIRST_NAME,
                 DEFAULT_LAST_NAME,
@@ -170,7 +170,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void updateMe() {
+    void updateMeTest() {
         UserUpdateMeRequestDto request = createUserUpdateMeRequestDto();
         User user = createUser();
 
@@ -188,7 +188,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void updateById() {
+    void updateByIdTest() {
         UserUpdateMeRequestDto request = createUserUpdateMeRequestDto();
         User user = createUser();
 
@@ -206,7 +206,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void updateByIdThrowsExceptionWhenUserNotFound() {
+    void updateByIdThrowsExceptionWhenUserNotFoundTest() {
         UserUpdateMeRequestDto request = createUserUpdateMeRequestDto();
 
         when(userRepository.findById(DEFAULT_ID))

@@ -50,7 +50,7 @@ class StoreServiceImplTest {
     private final static String DEFAULT_NUMBER = "88005553535";
 
     @Test
-    void findById() {
+    void findByIdTest() {
         Store store = createDefaultStore();
         StoreResponseDto expectedResponse = createDefaultStoreResponseDto();
 
@@ -67,7 +67,7 @@ class StoreServiceImplTest {
     }
 
     @Test
-    void findByIdThrowsException() {
+    void findByIdThrowsExceptionTest() {
         when(storeRepository.findById(DEFAULT_ID))
                 .thenReturn(Optional.empty());
 
@@ -75,7 +75,7 @@ class StoreServiceImplTest {
     }
 
     @Test
-    void create() {
+    void createTest() {
         StoreCreateRequestDto request = createStoreCreateRequestDto();
         Store store = createDefaultStore();
         StoreResponseDto expectedResponse = createDefaultStoreResponseDto();
@@ -93,7 +93,7 @@ class StoreServiceImplTest {
     }
 
     @Test
-    void delete() {
+    void deleteTest() {
         Store store = createDefaultStore();
 
         when(storeRepository.findById(DEFAULT_ID))
@@ -105,7 +105,7 @@ class StoreServiceImplTest {
     }
 
     @Test
-    void deleteThrowsException() {
+    void deleteThrowsExceptionTest() {
         when(storeRepository.findById(DEFAULT_ID))
                 .thenReturn(Optional.empty());
 
@@ -113,7 +113,7 @@ class StoreServiceImplTest {
     }
 
     @Test
-    void update() {
+    void updateTest() {
         StoreUpdateRequestDto request = createStoreUpdateRequestDto();
         Store store = createDefaultStore();
         StoreResponseDto expectedResponse = createDefaultStoreResponseDto();
@@ -131,7 +131,7 @@ class StoreServiceImplTest {
     }
 
     @Test
-    void updateThrowsExceptionWhenStoreNotFound() {
+    void updateThrowsExceptionWhenStoreNotFoundTest() {
         StoreUpdateRequestDto request = createStoreUpdateRequestDto();
 
         when(storeRepository.findById(DEFAULT_ID))
@@ -141,7 +141,7 @@ class StoreServiceImplTest {
     }
 
     @Test
-    void findAll() {
+    void findAllTest() {
         Pageable pageable = PageRequest.of(0, 10);
         Store store = createDefaultStore();
         Page<Store> storesPage = new PageImpl<>(Collections.singletonList(store));
