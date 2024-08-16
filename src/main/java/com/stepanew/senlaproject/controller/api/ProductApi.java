@@ -136,7 +136,7 @@ public interface ProductApi {
 
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "Продукт был успешно создан",
                     content = {
                             @Content(
@@ -279,6 +279,16 @@ public interface ProductApi {
             @ApiResponse(
                     responseCode = "404",
                     description = "Продукт не найден",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Имя продукта занято",
                     content = {
                             @Content(
                                     mediaType = "application/json",

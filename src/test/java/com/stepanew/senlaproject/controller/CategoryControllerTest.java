@@ -182,8 +182,8 @@ public class CategoryControllerTest extends AbstractControllerTest{
 
     //test code 403
     @Test
-    @WithMockUser(roles = "USER")
-    void createCategory_Forbidden_ReturnsForbidden() throws Exception {
+    @WithMockUser
+    void createForbiddenTest() throws Exception {
         mockMvc.perform(post(PATH + "/")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(createRequest)))

@@ -12,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -62,8 +61,6 @@ class PriceControllerTest extends AbstractControllerTest {
     private static final String AVERAGE_BY_VALUE = "days";
 
     private static final String MEDIA_TYPE_XLSX = "application/vnd.ms-excel";
-
-    private static final BigDecimal DEFAULT_PRICE = BigDecimal.valueOf(100);
 
     private PriceComparisonResponseDto responseDto;
 

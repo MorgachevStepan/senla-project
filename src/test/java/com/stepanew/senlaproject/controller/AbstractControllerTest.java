@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
+
 @WebMvcTest
 public abstract class AbstractControllerTest {
 
@@ -46,5 +48,7 @@ public abstract class AbstractControllerTest {
     protected static final String DEFAULT_ADDRESS = "Store Address";
 
     protected static final String DEFAULT_NUMBER = "88005553535";
+
+    protected static final BigDecimal DEFAULT_PRICE = BigDecimal.valueOf(100);
 
 }
