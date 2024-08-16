@@ -43,8 +43,6 @@ public class AuthControllerTest extends AbstractControllerTest {
 
     private static final String DEFAULT_ACCESS = "access token";
 
-
-
     @BeforeEach
     void setUp() {
         userCreateRequest = new UserCreateRequestDto(

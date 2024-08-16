@@ -62,8 +62,8 @@ public class CategoryControllerTest extends AbstractControllerTest{
     @Test
     @WithMockUser
     void getByIdTest() throws Exception {
-        when(categoryService.findById(anyLong())).thenReturn(responseDto);
-        mockMvc.perform(get(PATH + "/{id}", DEFAULT_ID))
+        when(categoryService.findById(DEFAULT_ID)).thenReturn(responseDto);
+        mockMvc.perform(get(PATH + "/{id}", DEFAULT_ID).with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(responseDto)));
     }

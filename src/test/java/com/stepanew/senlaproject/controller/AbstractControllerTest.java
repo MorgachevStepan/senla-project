@@ -1,6 +1,7 @@
 package com.stepanew.senlaproject.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stepanew.senlaproject.security.jwt.JwtAuthEntryPoint;
 import com.stepanew.senlaproject.security.jwt.JwtCore;
 import com.stepanew.senlaproject.security.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public abstract class AbstractControllerTest {
     @Autowired
     protected ObjectMapper objectMapper;
 
+    @MockBean
+    protected JwtAuthEntryPoint jwtAuthEntryPoint;
+
     protected static final String DEFAULT_NAME = "Name";
 
     protected static final String DEFAULT_DESCRIPTION = "Description";
@@ -38,5 +42,9 @@ public abstract class AbstractControllerTest {
     protected static final String DEFAULT_PATRONYMIC = "Ivanovich";
 
     protected static final String DEFAULT_EMAIL = "test@example.com";
+
+    protected static final String DEFAULT_ADDRESS = "Store Address";
+
+    protected static final String DEFAULT_NUMBER = "88005553535";
 
 }

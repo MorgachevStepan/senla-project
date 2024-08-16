@@ -32,10 +32,6 @@ public class StoreControllerTest extends AbstractControllerTest{
 
     private static final String PATH = "/api/v1/store";
 
-    private static final String DEFAULT_ADDRESS = "Store Address";
-
-    private static final String DEFAULT_NUMBER = "88005553535";
-
     private StoreResponseDto responseDto;
 
     private StoreCreateRequestDto createRequest;
