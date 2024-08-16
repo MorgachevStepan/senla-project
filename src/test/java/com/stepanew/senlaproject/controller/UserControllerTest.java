@@ -25,19 +25,7 @@ public class UserControllerTest extends AbstractControllerTest {
     @MockBean
     private UserService userService;
 
-    private static final Long DEFAULT_ID = 1L;
-
     private static final String PATH = "/api/v1/user";
-
-    private static final String CONTENT_TYPE = "application/json";
-
-    private static final String DEFAULT_FIRST_NAME = "Ivan";
-
-    private static final String DEFAULT_LAST_NAME = "Ivanov";
-
-    private static final String DEFAULT_PATRONYMIC = "Ivanovich";
-
-    private static final String DEFAULT_EMAIL = "test@example.com";
 
     private static final String LONG_STRING = "1".repeat(256);
 

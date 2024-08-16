@@ -30,16 +30,16 @@ public class StoreControllerTest extends AbstractControllerTest{
     @MockBean
     private StoreService storeService;
 
-    private static final Long DEFAULT_ID = 1L;
     private static final String PATH = "/api/v1/store";
-    private static final String DEFAULT_NAME = "Store Name";
+
     private static final String DEFAULT_ADDRESS = "Store Address";
 
     private static final String DEFAULT_NUMBER = "88005553535";
-    private static final String CONTENT_TYPE = "application/json";
 
     private StoreResponseDto responseDto;
+
     private StoreCreateRequestDto createRequest;
+
     private StoreUpdateRequestDto updateRequest;
 
     @BeforeEach

@@ -30,8 +30,6 @@ public class CategoryControllerTest extends AbstractControllerTest{
     @MockBean
     private CategoryService categoryService;
 
-    private final static Long DEFAULT_ID = 1L;
-
     private final static String PATH = "/api/v1/category";
 
     private CategoryResponseDto responseDto;
@@ -40,11 +38,6 @@ public class CategoryControllerTest extends AbstractControllerTest{
 
     private CategoryUpdateRequestDto updateRequest;
 
-    private static final String DEFAULT_NAME = "Name";
-
-    private static final String DEFAULT_DESCRIPTION = "Description";
-
-    private static final String CONTENT_TYPE = "application/json";
 
     @BeforeEach
     void setUp() {
