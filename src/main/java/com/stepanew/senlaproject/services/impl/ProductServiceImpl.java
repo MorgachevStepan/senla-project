@@ -228,7 +228,7 @@ public class ProductServiceImpl implements ProductService {
     private void logUsersAction(String email, Product product, ActionType actionType) {
         User user = userRepository
                 .findByEmail(email)
-                .orElseThrow(UserException.CODE.NO_SUCH_USER::get);
+                .orElseThrow(UserException.CODE.NO_SUCH_USER_ID::get);
 
         UserProductsAction userProductsAction = UserProductsAction
                 .builder()

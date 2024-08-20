@@ -118,7 +118,7 @@ public class JwtCore {
 
     private List<String> resolveRoles(Set<Role> roles) {
         return roles.stream()
-                .map(Role::getName)
+                .map(role -> role.getName().toString())
                 .collect(Collectors.toList());
     }
 

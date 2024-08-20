@@ -4,6 +4,7 @@ import com.stepanew.senlaproject.config.SecurityConfiguration;
 import com.stepanew.senlaproject.domain.dto.request.JwtRefreshRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.UserCreateRequestDto;
 import com.stepanew.senlaproject.exceptions.AuthException;
+import com.stepanew.senlaproject.exceptions.UserException;
 import com.stepanew.senlaproject.security.dto.JwtRequest;
 import com.stepanew.senlaproject.security.dto.JwtResponse;
 import com.stepanew.senlaproject.services.AuthService;
@@ -139,7 +140,7 @@ public class AuthControllerTest extends AbstractControllerTest {
     @Test
     void loginNotFoundTest() throws Exception {
         when(authService.login(any(JwtRequest.class)))
-                .thenThrow(AuthException.CODE.NO_SUCH_EMAIL_OR_PASSWORD.get());
+                .thenThrow(UserException.CODE.NO_SUCH_USER_EMAIL.get());
 
         mockMvc.perform(post(PATH + "/login")
                         .with(csrf())
@@ -180,7 +181,7 @@ public class AuthControllerTest extends AbstractControllerTest {
     @Test
     void refreshNotFoundTest() throws Exception {
         when(authService.refresh(any(JwtRefreshRequestDto.class)))
-                .thenThrow(AuthException.CODE.NO_SUCH_EMAIL_OR_PASSWORD.get());
+                .thenThrow(UserException.CODE.NO_SUCH_USER_ID.get());
 
         mockMvc.perform(post(PATH + "/refresh")
                         .with(csrf())
@@ -221,7 +222,7 @@ public class AuthControllerTest extends AbstractControllerTest {
     @Test
     void getAccessTokenFoundTest() throws Exception {
         when(authService.getAccessToken(any(JwtRefreshRequestDto.class)))
-                .thenThrow(AuthException.CODE.NO_SUCH_EMAIL_OR_PASSWORD.get());
+                .thenThrow(UserException.CODE.NO_SUCH_USER_ID.get());
 
         mockMvc.perform(post(PATH + "/access")
                         .with(csrf())

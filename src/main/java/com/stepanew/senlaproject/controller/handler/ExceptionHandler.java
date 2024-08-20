@@ -45,7 +45,6 @@ public class ExceptionHandler {
     public ResponseEntity<ErrorMessage> handleAuthException(AuthException e) {
         AuthException.CODE code = e.getCode();
         HttpStatus status = switch (code) {
-            case NO_SUCH_EMAIL_OR_PASSWORD -> HttpStatus.NOT_FOUND;
             case JWT_VALIDATION_ERROR -> HttpStatus.UNAUTHORIZED;
             case INVALID_REPEAT_PASSWORD -> HttpStatus.BAD_REQUEST;
             case EMAIL_IN_USE -> HttpStatus.CONFLICT;
@@ -159,7 +158,8 @@ public class ExceptionHandler {
     public ResponseEntity<ErrorMessage> handleUserException(UserException e) {
         UserException.CODE code = e.getCode();
         HttpStatus status = switch (code) {
-            case NO_SUCH_USER -> HttpStatus.NOT_FOUND;
+            case NO_SUCH_USER_ID, NO_SUCH_USER_EMAIL -> HttpStatus.NOT_FOUND;
+            case USER_IS_ALREADY_ADMIN -> HttpStatus.CONFLICT;
         };
         String codeStr = code.toString();
         return ResponseEntity

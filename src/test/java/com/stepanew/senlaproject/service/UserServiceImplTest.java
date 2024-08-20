@@ -105,7 +105,7 @@ class UserServiceImplTest {
         when(userRepository.findByEmail(DEFAULT_EMAIL))
                 .thenReturn(Optional.empty());
 
-        assertThrowsAuthException(() -> userService.getByEmail(DEFAULT_EMAIL));
+        assertThrowsUserException(() -> userService.getByEmail(DEFAULT_EMAIL));
     }
 
     @Test
@@ -275,4 +275,5 @@ class UserServiceImplTest {
                 AuthException.class, action::run
         );
     }
+
 }

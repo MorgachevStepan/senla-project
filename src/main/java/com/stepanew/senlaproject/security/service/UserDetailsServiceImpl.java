@@ -1,7 +1,7 @@
 package com.stepanew.senlaproject.security.service;
 
 import com.stepanew.senlaproject.domain.entity.User;
-import com.stepanew.senlaproject.exceptions.AuthException;
+import com.stepanew.senlaproject.exceptions.UserException;
 import com.stepanew.senlaproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository
                 .findByEmail(username)
-                .orElseThrow(AuthException.CODE.NO_SUCH_EMAIL_OR_PASSWORD::get);
+                .orElseThrow(UserException.CODE.NO_SUCH_USER_EMAIL::get);
 
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
@@ -36,7 +36,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                                 .getRoles()
                                 .stream()
                                 .map(
-                                        role -> new SimpleGrantedAuthority(role.getName())
+                                        role -> new SimpleGrantedAuthority(role.getName().toString())
                                 )
                                 .collect(Collectors.toList())
                 ))

@@ -8,7 +8,11 @@ public class UserException extends RuntimeException {
     @Getter
     public enum CODE {
 
-        NO_SUCH_USER("Нет пользователя с таким id");
+        NO_SUCH_USER_ID("Нет пользователя с таким id"),
+
+        NO_SUCH_USER_EMAIL("Нет пользователя с таким email"),
+
+        USER_IS_ALREADY_ADMIN("Пользователь уже обладает ролью админа");
 
         final String codeDescription;
 

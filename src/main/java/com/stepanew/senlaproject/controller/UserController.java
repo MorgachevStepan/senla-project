@@ -1,7 +1,9 @@
 package com.stepanew.senlaproject.controller;
 
 import com.stepanew.senlaproject.controller.api.UserApi;
+import com.stepanew.senlaproject.domain.dto.request.UserAddRoleRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.UserUpdateMeRequestDto;
+import com.stepanew.senlaproject.domain.dto.response.UserAddRoleResponseDto;
 import com.stepanew.senlaproject.domain.dto.response.UserUpdateMeResponseDto;
 import com.stepanew.senlaproject.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +41,15 @@ public class UserController implements UserApi {
             @RequestBody @Validated UserUpdateMeRequestDto request
     ) {
         UserUpdateMeResponseDto response = userService.updateById(request, id);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+
+    @PutMapping("/admin")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> addAdminRole(@RequestBody @Validated UserAddRoleRequestDto request) {
+        UserAddRoleResponseDto response = userService.addAdminRole(request);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);

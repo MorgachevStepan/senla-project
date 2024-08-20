@@ -6,9 +6,11 @@ import lombok.Getter;
 public class AuthException extends RuntimeException{
     @Getter
     public enum CODE {
-        NO_SUCH_EMAIL_OR_PASSWORD("Неправильный email или пароль"),
+
         JWT_VALIDATION_ERROR("Ошибка валидации JWT"),
+
         INVALID_REPEAT_PASSWORD("Пароли не совпадают"),
+
         EMAIL_IN_USE("Этот email уже используется");
 
         final String codeDescription;

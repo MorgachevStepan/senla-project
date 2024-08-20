@@ -1,14 +1,16 @@
 package com.stepanew.senlaproject.controller;
 
+import com.stepanew.senlaproject.domain.dto.request.UserAddRoleRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.UserUpdateMeRequestDto;
+import com.stepanew.senlaproject.domain.dto.response.UserAddRoleResponseDto;
 import com.stepanew.senlaproject.domain.dto.response.UserUpdateMeResponseDto;
-import com.stepanew.senlaproject.exceptions.AuthException;
 import com.stepanew.senlaproject.exceptions.UserException;
 import com.stepanew.senlaproject.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -31,7 +33,12 @@ public class UserControllerTest extends AbstractControllerTest {
 
 
     private UserUpdateMeRequestDto updateMeRequest;
+
     private UserUpdateMeResponseDto updateMeResponse;
+
+    private UserAddRoleRequestDto addRoleRequest;
+
+    private UserAddRoleResponseDto addRoleResponse;
 
     @BeforeEach
     void setUp() {
@@ -46,6 +53,8 @@ public class UserControllerTest extends AbstractControllerTest {
                 DEFAULT_LAST_NAME,
                 DEFAULT_PATRONYMIC
         );
+        addRoleRequest = new UserAddRoleRequestDto(DEFAULT_EMAIL);
+        addRoleResponse = new UserAddRoleResponseDto(DEFAULT_EMAIL);
     }
 
     // The beginning of updateMe method tests
@@ -96,7 +105,7 @@ public class UserControllerTest extends AbstractControllerTest {
     @WithMockUser
     void updateMeNotFoundTest() throws Exception {
         when(userService.updateMe(any(UserUpdateMeRequestDto.class), any(String.class)))
-                .thenThrow(AuthException.CODE.NO_SUCH_EMAIL_OR_PASSWORD.get());
+                .thenThrow(UserException.CODE.NO_SUCH_USER_EMAIL.get());
 
         mockMvc.perform(put(PATH + "/")
                         .with(csrf()).contentType(CONTENT_TYPE)
@@ -162,7 +171,7 @@ public class UserControllerTest extends AbstractControllerTest {
     @WithMockUser(roles = "ADMIN")
     void updateByIdNotFoundTest() throws Exception {
         when(userService.updateById(any(UserUpdateMeRequestDto.class), anyLong()))
-                .thenThrow(UserException.CODE.NO_SUCH_USER.get());
+                .thenThrow(UserException.CODE.NO_SUCH_USER_ID.get());
 
         mockMvc.perform(put(PATH + "/{id}", DEFAULT_ID)
                         .with(csrf())
@@ -171,5 +180,84 @@ public class UserControllerTest extends AbstractControllerTest {
                 .andExpect(status().isNotFound());
     }
     // The end of updateById method tests
+
+    // The beginning of addAdminRole method tests
+    // Test 200 OK
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void addAdminRoleTest() throws Exception {
+        when(userService.addAdminRole(any(UserAddRoleRequestDto.class)))
+                .thenReturn(addRoleResponse);
+
+        mockMvc.perform(put(PATH + "/admin")
+                        .with(csrf())
+                        .contentType(CONTENT_TYPE)
+                        .content(objectMapper.writeValueAsString(addRoleRequest)))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(addRoleResponse)));
+    }
+
+    // Test 400 Bad Request
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void addAdminRoleBadRequestTest() throws Exception {
+        UserAddRoleRequestDto invalidRequest = new UserAddRoleRequestDto(null);
+
+        mockMvc.perform(put(PATH + "/admin")
+                        .with(csrf())
+                        .contentType(CONTENT_TYPE)
+                        .content(objectMapper.writeValueAsString(invalidRequest)))
+                .andExpect(status().isBadRequest());
+    }
+
+    // Test 401 Unauthorized
+    @Test
+    @WithAnonymousUser
+    void addAdminRoleUnauthorizedTest() throws Exception {
+        mockMvc.perform(put(PATH + "/admin")
+                        .with(csrf())
+                        .contentType(CONTENT_TYPE)
+                        .content(objectMapper.writeValueAsString(addRoleRequest)))
+                .andExpect(status().isUnauthorized());
+    }
+
+    // Test 403 Forbidden
+    @Test
+    @WithMockUser(roles = "USER")
+    void addAdminRoleForbiddenTest() throws Exception {
+        mockMvc.perform(put(PATH + "/admin")
+                        .contentType(CONTENT_TYPE)
+                        .content(objectMapper.writeValueAsString(addRoleRequest)))
+                .andExpect(status().isForbidden());
+    }
+
+    // Test 404 Not Found
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void addAdminRoleNotFoundTest() throws Exception {
+        when(userService.addAdminRole(any(UserAddRoleRequestDto.class)))
+                .thenThrow(UserException.CODE.NO_SUCH_USER_EMAIL.get());
+
+        mockMvc.perform(put(PATH + "/admin")
+                        .with(csrf())
+                        .contentType(CONTENT_TYPE)
+                        .content(objectMapper.writeValueAsString(addRoleRequest)))
+                .andExpect(status().isNotFound());
+    }
+
+    // Test 409 Conflict
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void addAdminRoleConflictTest() throws Exception {
+        when(userService.addAdminRole(any(UserAddRoleRequestDto.class)))
+                .thenThrow(UserException.CODE.USER_IS_ALREADY_ADMIN.get());
+
+        mockMvc.perform(put(PATH + "/admin")
+                        .with(csrf())
+                        .contentType(CONTENT_TYPE)
+                        .content(objectMapper.writeValueAsString(addRoleRequest)))
+                .andExpect(status().isConflict());
+    }
+    // The end of addAdminRole method tests
 
 }

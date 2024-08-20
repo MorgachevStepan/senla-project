@@ -1,5 +1,6 @@
 package com.stepanew.senlaproject.domain.entity;
 
+import com.stepanew.senlaproject.domain.enums.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +20,7 @@ public class Role {
     private Long id;
 
     @Column(name = "name", unique = true)
-    private String name;
+    @Enumerated(value = EnumType.STRING)
+    private RoleType name;
 
 }
