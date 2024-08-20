@@ -30,7 +30,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -147,6 +149,8 @@ public class ProductServiceImpl implements ProductService {
 
         logUsersAction(email, product, ActionType.NEW_PRICED);
 
+        price.setCheckedDate(LocalDateTime.now());
+
         return priceResponseDtoMapper
                 .toDto(priceRepository.save(price));
     }
@@ -154,11 +158,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductBatchUploadDto uploadProducts(MultipartFile file, String email) {
         ProductBatchUploadDto response = new ProductBatchUploadDto(new ArrayList<>());
+        List<Product> products = new ArrayList<>();
 
         try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
             Sheet sheet = workbook.getSheetAt(0);
             for (Row row : sheet) {
-
                 if (row.getRowNum() == 0) {
                     continue;
                 }
@@ -174,12 +178,16 @@ public class ProductServiceImpl implements ProductService {
                         .category(category)
                         .build();
 
-                ProductCreateRequestDto request = productCreateRequestDtoMapper.toDto(product);
-
-                response
-                        .uploaded()
-                        .add(create(request, email));
+                products.add(product);
             }
+
+            List<Product> savedProducts = productRepository.saveAll(products);
+            logUsersActionBatch(email, savedProducts, ActionType.ADDED);
+
+            for (Product savedProduct : savedProducts) {
+                response.uploaded().add(productResponseDtoMapper.toDto(savedProduct));
+            }
+
         } catch (IllegalStateException e) {
             throw ParserException.CODE.WRONG_DATA_FORMAT.get();
         } catch (UnsupportedFileFormatException e) {
@@ -191,27 +199,40 @@ public class ProductServiceImpl implements ProductService {
         return response;
     }
 
+
     @Override
     public PriceBatchUploadDto uploadPrices(MultipartFile file, String email) {
         PriceBatchUploadDto response = new PriceBatchUploadDto(new ArrayList<>());
+        List<Price> prices = new ArrayList<>();
+        List<Product> products = new ArrayList<>();
 
         try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
             Sheet sheet = workbook.getSheetAt(0);
             for (Row row : sheet) {
-
                 if (row.getRowNum() == 0) {
                     continue;
                 }
 
-                PriceCreateRequestDto request = new PriceCreateRequestDto(
-                        (long) row.getCell(0).getNumericCellValue(),
-                        (long) row.getCell(1).getNumericCellValue(),
-                        BigDecimal.valueOf(row.getCell(2).getNumericCellValue())
-                );
+                PriceCreateRequestDto request = getPriceCreateRequestDtoFromRow(row);
 
-                response
-                        .uploaded()
-                        .add(addPrice(request, email));
+                Price price = priceCreateRequestDtoMapper.toEntity(request);
+                Product product = findProductById(request.productId());
+                Store store = storeRepository.findById(request.storeId())
+                        .orElseThrow(StoreException.CODE.NO_SUCH_STORE::get);
+
+                price.setProduct(product);
+                price.setStore(store);
+                price.setCheckedDate(LocalDateTime.now());
+
+                products.add(product);
+                prices.add(price);
+            }
+
+            logUsersActionBatch(email, products, ActionType.NEW_PRICED);
+            priceRepository.saveAll(prices);
+
+            for (Price price : prices) {
+                response.uploaded().add(priceResponseDtoMapper.toDto(price));
             }
         } catch (IllegalStateException e) {
             throw ParserException.CODE.WRONG_DATA_FORMAT.get();
@@ -225,10 +246,16 @@ public class ProductServiceImpl implements ProductService {
         return response;
     }
 
+    private static PriceCreateRequestDto getPriceCreateRequestDtoFromRow(Row row) {
+        return new PriceCreateRequestDto(
+                (long) row.getCell(0).getNumericCellValue(),
+                (long) row.getCell(1).getNumericCellValue(),
+                BigDecimal.valueOf(row.getCell(2).getNumericCellValue())
+        );
+    }
+
     private void logUsersAction(String email, Product product, ActionType actionType) {
-        User user = userRepository
-                .findByEmail(email)
-                .orElseThrow(UserException.CODE.NO_SUCH_USER_ID::get);
+        User user = getUserByEmail(email);
 
         UserProductsAction userProductsAction = UserProductsAction
                 .builder()
@@ -238,6 +265,29 @@ public class ProductServiceImpl implements ProductService {
                 .build();
 
         userProductsActionRepository.save(userProductsAction);
+    }
+
+    private void logUsersActionBatch(String email, List<Product> products, ActionType actionType) {
+        User user = getUserByEmail(email);
+
+        List<UserProductsAction> result = new ArrayList<>();
+
+        for (Product product: products) {
+            result.add(UserProductsAction
+                    .builder()
+                    .email(user.getEmail())
+                    .product(product.getName())
+                    .actionType(actionType)
+                    .build());
+        }
+
+        userProductsActionRepository.saveAll(result);
+    }
+
+    private User getUserByEmail(String email) {
+        return userRepository
+                .findByEmail(email)
+                .orElseThrow(UserException.CODE.NO_SUCH_USER_ID::get);
     }
 
     private void checkToUsingName(String request) {

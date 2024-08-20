@@ -3,7 +3,6 @@ package com.stepanew.senlaproject.domain.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,7 +17,8 @@ import java.time.LocalDateTime;
 public class Price {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "price_seq")
+    @SequenceGenerator(name = "price_seq", sequenceName = "price_seq", allocationSize = 50)
     @Column(name = "id")
     private Long id;
 
@@ -27,8 +27,6 @@ public class Price {
 
     @Column(name = "checked_date")
     @JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime checkedDate;
 
     @ManyToOne(optional = false)

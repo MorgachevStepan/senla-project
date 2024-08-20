@@ -18,8 +18,9 @@
 
     <!-- prices -->
     <changeSet id="20072024165230" author="morgachev_stepan">
+        <createSequence sequenceName="price_seq" startValue="1" incrementBy="50"/>
         <createTable tableName="prices">
-            <column name="id" type="bigint" autoIncrement="true">
+            <column name="id" type="bigint" defaultValueComputed="nextval('price_seq')">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="price" type="numeric(38,2)"/>
@@ -35,8 +36,9 @@
 
     <!-- products -->
     <changeSet id="20072024165340" author="morgachev_stepan">
+        <createSequence sequenceName="product_seq" startValue="1" incrementBy="50"/>
         <createTable tableName="products">
-            <column name="id" type="bigint" autoIncrement="true">
+            <column name="id" type="bigint" defaultValueComputed="nextval('product_seq')">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="category_id" type="bigint">
@@ -92,8 +94,9 @@
 
     <!-- user_products_actions -->
     <changeSet id="20072024165412" author="morgachev_stepan">
+        <createSequence sequenceName="action_seq" startValue="1" incrementBy="50"/>
         <createTable tableName="user_products_actions">
-            <column name="id" type="bigint" autoIncrement="true">
+            <column name="id" type="bigint" defaultValueComputed="nextval('action_seq')">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="action_date" type="timestamp(6)"/>
