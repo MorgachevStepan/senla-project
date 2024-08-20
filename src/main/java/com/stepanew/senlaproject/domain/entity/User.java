@@ -3,6 +3,7 @@ package com.stepanew.senlaproject.domain.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -30,6 +31,8 @@ public class User {
 
     @Column(name = "created_date")
     @JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdDate;
 
     @ManyToMany(fetch = FetchType.LAZY)

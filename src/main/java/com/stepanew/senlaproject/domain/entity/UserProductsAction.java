@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.stepanew.senlaproject.domain.enums.ActionType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -34,6 +35,8 @@ public class UserProductsAction {
 
     @Column(name = "action_date")
     @JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime actionDate;
 
 }

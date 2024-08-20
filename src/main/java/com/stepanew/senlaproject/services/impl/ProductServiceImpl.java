@@ -30,8 +30,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 @Slf4j
@@ -141,7 +139,6 @@ public class ProductServiceImpl implements ProductService {
                 .findById(request.storeId())
                 .orElseThrow(StoreException.CODE.NO_SUCH_STORE::get);
 
-        price.setCheckedDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         price.setProduct(product);
         price.setStore(store);
 
@@ -238,7 +235,6 @@ public class ProductServiceImpl implements ProductService {
                 .email(user.getEmail())
                 .product(product.getName())
                 .actionType(actionType)
-                .actionDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
                 .build();
 
         userProductsActionRepository.save(userProductsAction);
