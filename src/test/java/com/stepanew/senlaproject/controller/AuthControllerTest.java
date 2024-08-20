@@ -72,7 +72,7 @@ public class AuthControllerTest extends AbstractControllerTest {
     }
 
     //The beginning of register method tests
-    // Test for POST /register - 200 OK
+    // Test for POST /register - 204 OK
     @Test
     void registerTest() throws Exception {
         when(authService.register(any(UserCreateRequestDto.class))).thenReturn(jwtResponse);
@@ -80,7 +80,7 @@ public class AuthControllerTest extends AbstractControllerTest {
         mockMvc.perform(post(PATH + "/register")
                         .contentType(CONTENT_TYPE)
                         .content(objectMapper.writeValueAsString(userCreateRequest)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().json(objectMapper.writeValueAsString(jwtResponse)));
     }
 

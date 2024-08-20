@@ -88,7 +88,7 @@ public class CategoryControllerTest extends AbstractControllerTest{
     //test code 404
     @Test
     @WithMockUser
-    void getById_NotFound_ReturnsNotFound() throws Exception {
+    void getByIdNotFoundTest() throws Exception {
         when(categoryService.findById(anyLong())).thenThrow(CategoryException.CODE.NO_SUCH_CATEGORY.get());
 
         mockMvc.perform(get(PATH + "/{id}", DEFAULT_ID))
@@ -143,7 +143,7 @@ public class CategoryControllerTest extends AbstractControllerTest{
     //the end of findByAll method tests
 
     //the beginning of create method tests
-    //test code 200
+    //test code 201
     @Test
     @WithMockUser(roles = {"ADMIN", "USER"})
     void createTest() throws Exception {

@@ -56,7 +56,7 @@ public interface AuthApi {
 
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "Успешная регистрация",
                     content = {
                             @Content(

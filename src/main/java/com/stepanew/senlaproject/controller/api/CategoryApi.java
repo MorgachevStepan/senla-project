@@ -125,7 +125,7 @@ public interface CategoryApi {
 
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "Категория была успешно создана",
                     content = {
                             @Content(

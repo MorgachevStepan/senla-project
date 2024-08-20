@@ -125,7 +125,7 @@ public class ProductController implements ProductApi {
             Principal principal
     ) {
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .status(HttpStatus.CREATED)
                 .body(productService.addPrice(request, principal.getName()));
     }
 
@@ -137,7 +137,7 @@ public class ProductController implements ProductApi {
     ) {
         ProductBatchUploadDto response =  productService.uploadProducts(file, principal.getName());
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .status(HttpStatus.CREATED)
                 .body(response);
     }
 
@@ -149,7 +149,7 @@ public class ProductController implements ProductApi {
     ) {
         PriceBatchUploadDto response =  productService.uploadPrices(file, principal.getName());
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .status(HttpStatus.CREATED)
                 .body(response);
     }
 

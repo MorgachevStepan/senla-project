@@ -305,7 +305,7 @@ public interface ProductApi {
 
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "Успешное обновление цены для продукта",
                     content = {
                             @Content(
@@ -363,7 +363,7 @@ public interface ProductApi {
 
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "Успешное добавление продуктов",
                     content = {
                             @Content(
@@ -436,7 +436,7 @@ public interface ProductApi {
 
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "Успешное добавление цен на продукты",
                     content = {
                             @Content(

@@ -127,7 +127,7 @@ public interface StoreApi {
 
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "Торговая точка была успешно создана",
                     content = {
                             @Content(

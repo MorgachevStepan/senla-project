@@ -393,7 +393,7 @@ class ProductControllerTest extends AbstractControllerTest {
     //the end of update method tests
 
     //the beginnig of addPriceToProduct method tests
-    // Test 200 Ok
+    // Test 201 created
     @Test
     @WithMockUser(roles = {"ADMIN", "USER"})
     void addPriceToProductTest() throws Exception {
@@ -404,7 +404,7 @@ class ProductControllerTest extends AbstractControllerTest {
                         .with(csrf())
                         .contentType(CONTENT_TYPE)
                         .content(objectMapper.writeValueAsString(priceCreateRequestDto)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().json(objectMapper.writeValueAsString(priceResponseDto)));
     }
 
@@ -461,7 +461,7 @@ class ProductControllerTest extends AbstractControllerTest {
     //the end of addPriceToProduct method tests
 
     //the beginning of uploadProducts method tests
-    // Test 200 OK
+    // Test 201 created
     @Test
     @WithMockUser(roles = {"ADMIN", "USER"})
     void uploadProductsTest() throws Exception {
@@ -472,7 +472,7 @@ class ProductControllerTest extends AbstractControllerTest {
                         .file(file)
                         .with(csrf())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType(CONTENT_TYPE))
                 .andExpect(content().json(objectMapper.writeValueAsString(
                         new ProductBatchUploadDto(new ArrayList<>(List.of(responseDto)))))
@@ -542,7 +542,7 @@ class ProductControllerTest extends AbstractControllerTest {
     //the end of uploadProducts method tests
 
     //the beginning of uploadPrices method tests
-    // Test 200 OK
+    // Test 201 created
     @Test
     @WithMockUser(roles = {"ADMIN", "USER"})
     void uploadPricesTest() throws Exception {
@@ -553,7 +553,7 @@ class ProductControllerTest extends AbstractControllerTest {
                         .file(file)
                         .with(csrf())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType(CONTENT_TYPE))
                 .andExpect(content().json(objectMapper.writeValueAsString(
                         new PriceBatchUploadDto(new ArrayList<>(List.of(priceResponseDto)))))

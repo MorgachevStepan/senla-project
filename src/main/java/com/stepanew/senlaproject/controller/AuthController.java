@@ -24,7 +24,7 @@ public class AuthController implements AuthApi {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Validated UserCreateRequestDto request) {
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .status(HttpStatus.CREATED)
                 .body(authService.register(request));
     }
 
