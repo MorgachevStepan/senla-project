@@ -138,22 +138,28 @@
     <changeSet id="20072024165432" author="morgachev_stepan">
         <addForeignKeyConstraint baseTableName="prices" baseColumnNames="product_id"
                                  constraintName="fk_prices_product"
-                                 referencedTableName="products" referencedColumnNames="id"/>
+                                 referencedTableName="products" referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
         <addForeignKeyConstraint baseTableName="prices" baseColumnNames="store_id"
                                  constraintName="fk_prices_store"
-                                 referencedTableName="stores" referencedColumnNames="id"/>
+                                 referencedTableName="stores" referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
         <addForeignKeyConstraint baseTableName="products" baseColumnNames="category_id"
                                  constraintName="fk_products_category"
-                                 referencedTableName="categories" referencedColumnNames="id"/>
+                                 referencedTableName="categories" referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
         <addForeignKeyConstraint baseTableName="profiles" baseColumnNames="user_id"
                                  constraintName="fk_profiles_user"
-                                 referencedTableName="users" referencedColumnNames="id"/>
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
         <addForeignKeyConstraint baseTableName="users_roles" baseColumnNames="roles_id"
                                  constraintName="fk_users_roles_role"
-                                 referencedTableName="roles" referencedColumnNames="id"/>
+                                 referencedTableName="roles" referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
         <addForeignKeyConstraint baseTableName="users_roles" baseColumnNames="user_id"
                                  constraintName="fk_users_roles_user"
-                                 referencedTableName="users" referencedColumnNames="id"/>
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
     </changeSet>
 
 </databaseChangeLog>

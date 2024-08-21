@@ -25,6 +25,7 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -65,6 +66,8 @@ public class PriceServiceImpl implements PriceService {
         if (priceList.isEmpty()) {
             return new byte[0];
         }
+
+        priceList.sort(Comparator.comparing(Price::getCheckedDate));
 
         return priceChartMaker.createChart(priceList).toByteArray();
     }
