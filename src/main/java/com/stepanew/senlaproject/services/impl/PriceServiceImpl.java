@@ -4,6 +4,7 @@ import com.stepanew.senlaproject.domain.dto.response.ComparisonResponseDto;
 import com.stepanew.senlaproject.domain.dto.response.PriceComparisonResponseDto;
 import com.stepanew.senlaproject.domain.dto.response.StoreWithPriceResponseDto;
 import com.stepanew.senlaproject.domain.entity.Price;
+import com.stepanew.senlaproject.domain.mapper.price.StoreWithPriceResponseDtoMapper;
 import com.stepanew.senlaproject.exceptions.ParserException;
 import com.stepanew.senlaproject.exceptions.PriceException;
 import com.stepanew.senlaproject.repository.PriceRepository;
@@ -16,6 +17,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +42,8 @@ public class PriceServiceImpl implements PriceService {
     private final ChartMaker<Price> priceChartMaker;
 
     private final List<AveragePriceChartMaker> averagePriceChartMakers;
+
+    private final StoreWithPriceResponseDtoMapper storeWithPriceResponseDtoMapper;
 
     private final static String STATUS_MESSAGE =
             "В магазине %s по адресу %s дешевле чем в магазине %s по адресу %s на %.2f рублей или на %.2f процентов";
@@ -107,16 +111,18 @@ public class PriceServiceImpl implements PriceService {
             Price firstPrice = findPriceByIdProductIdAndStoreId(productId, firstStoreId);
             Price secondPrice = findPriceByIdProductIdAndStoreId(productId, secondStoreId);
 
-            StoreWithPriceResponseDto maxPrice = getMaxPrice(firstPrice, secondPrice);
-            StoreWithPriceResponseDto minPrice = getMinPrice(firstPrice, secondPrice);
+            Pair<StoreWithPriceResponseDto, StoreWithPriceResponseDto> minMaxPrices = findMinMaxPrices(
+                    firstPrice,
+                    secondPrice
+            );
 
-            String comparisonStatus = createStatus(minPrice, maxPrice);
+            String comparisonStatus = createStatus(minMaxPrices.getFirst(), minMaxPrices.getSecond());
 
             ComparisonResponseDto comparisonResult = new ComparisonResponseDto(
                     productId,
                     firstPrice.getProduct().getName(),
-                    minPrice,
-                    maxPrice,
+                    minMaxPrices.getFirst(),
+                    minMaxPrices.getSecond(),
                     comparisonStatus
             );
 
@@ -166,42 +172,21 @@ public class PriceServiceImpl implements PriceService {
         }
     }
 
-    private StoreWithPriceResponseDto getMaxPrice(
+    private Pair<StoreWithPriceResponseDto, StoreWithPriceResponseDto> findMinMaxPrices(
             Price firstPrice,
             Price secondPrice
     ) {
-        return firstPrice.getPrice().compareTo(secondPrice.getPrice()) > 0 ?
-                new StoreWithPriceResponseDto(
-                        firstPrice.getStore().getId(),
-                        firstPrice.getStore().getName(),
-                        firstPrice.getStore().getAddress(),
-                        firstPrice.getPrice()
-                ) :
-                new StoreWithPriceResponseDto(
-                        secondPrice.getStore().getId(),
-                        secondPrice.getStore().getName(),
-                        secondPrice.getStore().getAddress(),
-                        secondPrice.getPrice()
-                );
-    }
-
-    private StoreWithPriceResponseDto getMinPrice(
-            Price firstPrice,
-            Price secondPrice
-    ) {
-        return firstPrice.getPrice().compareTo(secondPrice.getPrice()) <= 0 ?
-                new StoreWithPriceResponseDto(
-                        firstPrice.getStore().getId(),
-                        firstPrice.getStore().getName(),
-                        firstPrice.getStore().getAddress(),
-                        firstPrice.getPrice()
-                ) :
-                new StoreWithPriceResponseDto(
-                        secondPrice.getStore().getId(),
-                        secondPrice.getStore().getName(),
-                        secondPrice.getStore().getAddress(),
-                        secondPrice.getPrice()
-                );
+        if (firstPrice.getPrice().compareTo(secondPrice.getPrice()) > 0) {
+            return Pair.of(
+                    storeWithPriceResponseDtoMapper.toDto(secondPrice),
+                    storeWithPriceResponseDtoMapper.toDto(firstPrice)
+            );
+        } else {
+            return Pair.of(
+                    storeWithPriceResponseDtoMapper.toDto(firstPrice),
+                    storeWithPriceResponseDtoMapper.toDto(secondPrice)
+            );
+        }
     }
 
     private String createStatus(StoreWithPriceResponseDto minPrice, StoreWithPriceResponseDto maxPrice) {
