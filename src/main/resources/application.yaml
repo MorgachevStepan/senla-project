@@ -14,6 +14,14 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: true
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 50
+          order_inserts: true
+          order_updates: true
+          batch_versioned_data: true
+        generate_statistics: true
   liquibase:
     change-log: classpath:liquibase/db.changelog-master.xml
     enabled: true
