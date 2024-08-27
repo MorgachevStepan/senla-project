@@ -3,9 +3,7 @@ package com.stepanew.senlaproject.services;
 import com.stepanew.senlaproject.domain.dto.request.PriceCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductUpdateRequestDto;
-import com.stepanew.senlaproject.domain.dto.response.PriceBatchUploadDto;
 import com.stepanew.senlaproject.domain.dto.response.PriceResponseDto;
-import com.stepanew.senlaproject.domain.dto.response.ProductBatchUploadDto;
 import com.stepanew.senlaproject.domain.dto.response.ProductResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,8 +23,8 @@ public interface ProductService {
 
     PriceResponseDto addPrice(PriceCreateRequestDto request, String email);
 
-    ProductBatchUploadDto uploadProducts(MultipartFile file, String email);
+    void uploadProducts(MultipartFile file, String email);
 
-    PriceBatchUploadDto uploadPrices(MultipartFile file, String email);
+    void uploadPrices(MultipartFile file, String email);
 
 }

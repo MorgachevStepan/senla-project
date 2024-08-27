@@ -3,9 +3,7 @@ package com.stepanew.senlaproject.services.impl;
 import com.stepanew.senlaproject.domain.dto.request.PriceCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductUpdateRequestDto;
-import com.stepanew.senlaproject.domain.dto.response.PriceBatchUploadDto;
 import com.stepanew.senlaproject.domain.dto.response.PriceResponseDto;
-import com.stepanew.senlaproject.domain.dto.response.ProductBatchUploadDto;
 import com.stepanew.senlaproject.domain.dto.response.ProductResponseDto;
 import com.stepanew.senlaproject.domain.entity.*;
 import com.stepanew.senlaproject.domain.enums.ActionType;
@@ -163,8 +161,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public ProductBatchUploadDto uploadProducts(MultipartFile file, String email) {
-        ProductBatchUploadDto response = new ProductBatchUploadDto(new ArrayList<>());
+    public void uploadProducts(MultipartFile file, String email) {
         List<Product> products = new ArrayList<>();
 
         try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
@@ -190,11 +187,6 @@ public class ProductServiceImpl implements ProductService {
 
             List<Product> savedProducts = productRepository.saveAll(products);
             logUsersActionBatch(email, savedProducts, ActionType.ADDED);
-
-            for (Product savedProduct : savedProducts) {
-                response.uploaded().add(productResponseDtoMapper.toDto(savedProduct));
-            }
-
         } catch (IllegalStateException e) {
             throw ParserException.CODE.WRONG_DATA_FORMAT.get();
         } catch (UnsupportedFileFormatException e) {
@@ -202,15 +194,12 @@ public class ProductServiceImpl implements ProductService {
         } catch (IOException e) {
             throw ParserException.CODE.SOMETHING_WRONG.get();
         }
-
-        return response;
     }
 
 
     @Override
     @Transactional
-    public PriceBatchUploadDto uploadPrices(MultipartFile file, String email) {
-        PriceBatchUploadDto response = new PriceBatchUploadDto(new ArrayList<>());
+    public void uploadPrices(MultipartFile file, String email) {
         List<Price> prices = new ArrayList<>();
         List<Product> products = new ArrayList<>();
 
@@ -238,10 +227,6 @@ public class ProductServiceImpl implements ProductService {
 
             logUsersActionBatch(email, products, ActionType.NEW_PRICED);
             priceRepository.saveAll(prices);
-
-            for (Price price : prices) {
-                response.uploaded().add(priceResponseDtoMapper.toDto(price));
-            }
         } catch (IllegalStateException e) {
             throw ParserException.CODE.WRONG_DATA_FORMAT.get();
         } catch (UnsupportedFileFormatException e) {
@@ -250,8 +235,6 @@ public class ProductServiceImpl implements ProductService {
         } catch (IOException e) {
             throw ParserException.CODE.SOMETHING_WRONG.get();
         }
-
-        return response;
     }
 
     private static PriceCreateRequestDto getPriceCreateRequestDtoFromRow(Row row) {

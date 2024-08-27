@@ -4,8 +4,6 @@ import com.stepanew.senlaproject.controller.api.ProductApi;
 import com.stepanew.senlaproject.domain.dto.request.PriceCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductUpdateRequestDto;
-import com.stepanew.senlaproject.domain.dto.response.PriceBatchUploadDto;
-import com.stepanew.senlaproject.domain.dto.response.ProductBatchUploadDto;
 import com.stepanew.senlaproject.domain.dto.response.ProductResponseDto;
 import com.stepanew.senlaproject.services.ProductService;
 import jakarta.validation.constraints.Min;
@@ -128,10 +126,10 @@ public class ProductController implements ProductApi {
             @RequestParam("file") MultipartFile file,
             Principal principal
     ) {
-        ProductBatchUploadDto response =  productService.uploadProducts(file, principal.getName());
+        productService.uploadProducts(file, principal.getName());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(response);
+                .build();
     }
 
     @PostMapping(value = "/batch/price", consumes = "multipart/form-data")
@@ -140,10 +138,10 @@ public class ProductController implements ProductApi {
             @RequestParam("file") MultipartFile file,
             Principal principal
     ) {
-        PriceBatchUploadDto response =  productService.uploadPrices(file, principal.getName());
+        productService.uploadPrices(file, principal.getName());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(response);
+                .build();
     }
 
 }

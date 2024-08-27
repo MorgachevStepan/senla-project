@@ -3,9 +3,7 @@ package com.stepanew.senlaproject.controller.api;
 import com.stepanew.senlaproject.domain.dto.request.PriceCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductUpdateRequestDto;
-import com.stepanew.senlaproject.domain.dto.response.PriceBatchUploadDto;
 import com.stepanew.senlaproject.domain.dto.response.PriceResponseDto;
-import com.stepanew.senlaproject.domain.dto.response.ProductBatchUploadDto;
 import com.stepanew.senlaproject.domain.dto.response.ProductResponseDto;
 import com.stepanew.senlaproject.exceptions.message.ErrorMessage;
 import com.stepanew.senlaproject.exceptions.message.ValidationErrorMessage;
@@ -360,13 +358,7 @@ public interface ProductApi {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
-                    description = "Успешное добавление продуктов",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = ProductBatchUploadDto.class)
-                            )
-                    }
+                    description = "Успешное добавление продуктов"
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -433,13 +425,7 @@ public interface ProductApi {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
-                    description = "Успешное добавление цен на продукты",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = PriceBatchUploadDto.class)
-                            )
-                    }
+                    description = "Успешное добавление цен на продукты"
             ),
             @ApiResponse(
                     responseCode = "400",

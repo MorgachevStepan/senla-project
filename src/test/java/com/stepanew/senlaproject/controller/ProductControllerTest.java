@@ -3,9 +3,7 @@ package com.stepanew.senlaproject.controller;
 import com.stepanew.senlaproject.domain.dto.request.PriceCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductUpdateRequestDto;
-import com.stepanew.senlaproject.domain.dto.response.PriceBatchUploadDto;
 import com.stepanew.senlaproject.domain.dto.response.PriceResponseDto;
-import com.stepanew.senlaproject.domain.dto.response.ProductBatchUploadDto;
 import com.stepanew.senlaproject.domain.dto.response.ProductResponseDto;
 import com.stepanew.senlaproject.exceptions.ParserException;
 import com.stepanew.senlaproject.exceptions.ProductException;
@@ -24,9 +22,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -450,26 +446,24 @@ class ProductControllerTest extends AbstractControllerTest {
     @Test
     @WithMockUser(roles = {"ADMIN", "USER"})
     void uploadProductsTest() throws Exception {
-        when(productService.uploadProducts(any(MultipartFile.class), any(String.class)))
-                .thenReturn(new ProductBatchUploadDto(new ArrayList<>(List.of(responseDto))));
+        doNothing().when(productService).uploadProducts(any(MultipartFile.class), any(String.class));
 
         mockMvc.perform(multipart(PATH + "/batch")
                         .file(file)
                         .with(csrf())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isCreated())
-                .andExpect(content().contentType(CONTENT_TYPE))
-                .andExpect(content().json(objectMapper.writeValueAsString(
-                        new ProductBatchUploadDto(new ArrayList<>(List.of(responseDto)))))
-                );
+                .andExpect(status().isCreated());
+
+        verify(productService, times(1))
+                .uploadProducts(any(MultipartFile.class), any(String.class));
     }
 
     // Test 400 Bad Request
     @Test
     @WithMockUser(roles = {"ADMIN", "USER"})
     void uploadProductsBadRequestTest() throws Exception {
-        when(productService.uploadProducts(any(MultipartFile.class), any(String.class)))
-                .thenThrow(ParserException.CODE.WRONG_DATA_FORMAT.get());
+        doThrow(ParserException.CODE.WRONG_DATA_FORMAT.get())
+                .when(productService).uploadProducts(any(MultipartFile.class), any(String.class));
         mockMvc.perform(multipart(PATH + "/batch")
                         .file(file)
                         .with(csrf())
@@ -502,8 +496,8 @@ class ProductControllerTest extends AbstractControllerTest {
     @Test
     @WithMockUser(roles = {"ADMIN", "USER"})
     void uploadProductsNotFoundTest() throws Exception {
-        when(productService.uploadProducts(any(MultipartFile.class), any(String.class)))
-                .thenThrow(ProductException.CODE.NO_SUCH_PRODUCT.get());
+        doThrow(ProductException.CODE.NO_SUCH_PRODUCT.get())
+                .when(productService).uploadProducts(any(MultipartFile.class), any(String.class));
 
         mockMvc.perform(multipart(PATH + "/batch")
                         .file(file)
@@ -515,8 +509,8 @@ class ProductControllerTest extends AbstractControllerTest {
     @Test
     @WithMockUser(roles = {"ADMIN", "USER"})
     void uploadProductsServerErrorTest() throws Exception {
-        when(productService.uploadProducts(any(MultipartFile.class), any(String.class)))
-                .thenThrow(ParserException.CODE.SOMETHING_WRONG.get());
+        doThrow(ParserException.CODE.SOMETHING_WRONG.get())
+                .when(productService).uploadProducts(any(MultipartFile.class), any(String.class));
 
         mockMvc.perform(multipart(PATH + "/batch")
                         .file(file)
@@ -531,26 +525,25 @@ class ProductControllerTest extends AbstractControllerTest {
     @Test
     @WithMockUser(roles = {"ADMIN", "USER"})
     void uploadPricesTest() throws Exception {
-        when(productService.uploadPrices(any(MultipartFile.class), any(String.class)))
-                .thenReturn(new PriceBatchUploadDto(new ArrayList<>(List.of(priceResponseDto))));
+        doNothing().when(productService).uploadPrices(any(MultipartFile.class), any(String.class));
 
         mockMvc.perform(multipart(PATH + "/batch/price")
                         .file(file)
                         .with(csrf())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isCreated())
-                .andExpect(content().contentType(CONTENT_TYPE))
-                .andExpect(content().json(objectMapper.writeValueAsString(
-                        new PriceBatchUploadDto(new ArrayList<>(List.of(priceResponseDto)))))
-                );
+                .andExpect(status().isCreated());
+
+        verify(productService, times(1))
+                .uploadPrices(any(MultipartFile.class), any(String.class));
     }
 
     // Test 400 Bad Request
     @Test
     @WithMockUser(roles = {"ADMIN", "USER"})
     void uploadPricesBadRequestTest() throws Exception {
-        when(productService.uploadPrices(any(MultipartFile.class), any(String.class)))
-                .thenThrow(ParserException.CODE.WRONG_DATA_FORMAT.get());
+        doThrow(ParserException.CODE.WRONG_DATA_FORMAT.get())
+                .when(productService).uploadPrices(any(MultipartFile.class), any(String.class));
+
         mockMvc.perform(multipart(PATH + "/batch/price")
                         .file(file)
                         .with(csrf())
@@ -583,8 +576,8 @@ class ProductControllerTest extends AbstractControllerTest {
     @Test
     @WithMockUser(roles = {"ADMIN", "USER"})
     void uploadPricesNotFoundTest() throws Exception {
-        when(productService.uploadPrices(any(MultipartFile.class), any(String.class)))
-                .thenThrow(ProductException.CODE.NO_SUCH_PRODUCT.get());
+        doThrow(ProductException.CODE.NO_SUCH_PRODUCT.get())
+                .when(productService).uploadPrices(any(MultipartFile.class), any(String.class));
 
         mockMvc.perform(multipart(PATH + "/batch/price")
                         .file(file)
@@ -596,8 +589,8 @@ class ProductControllerTest extends AbstractControllerTest {
     @Test
     @WithMockUser(roles = {"ADMIN", "USER"})
     void uploadPricesServerErrorTest() throws Exception {
-        when(productService.uploadPrices(any(MultipartFile.class), any(String.class)))
-                .thenThrow(ParserException.CODE.SOMETHING_WRONG.get());
+        doThrow(ParserException.CODE.SOMETHING_WRONG.get())
+                .when(productService).uploadPrices(any(MultipartFile.class), any(String.class));
 
         mockMvc.perform(multipart(PATH + "/batch/price")
                         .file(file)
