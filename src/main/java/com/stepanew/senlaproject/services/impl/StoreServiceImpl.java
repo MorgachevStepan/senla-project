@@ -13,8 +13,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class StoreServiceImpl implements StoreService {
 
@@ -31,6 +33,7 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    @Transactional
     public StoreResponseDto create(StoreCreateRequestDto request) {
         Store store = storeCreateRequestDtoMapper.toEntity(request);
 
@@ -40,6 +43,7 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         storeRepository.delete(
                 findStoreById(id)
@@ -47,6 +51,7 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    @Transactional
     public StoreResponseDto update(StoreUpdateRequestDto request) {
         Store updatedStore = findStoreById(request.id());
 

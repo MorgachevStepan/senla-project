@@ -17,6 +17,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -29,6 +30,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PriceServiceImpl implements PriceService {
 
@@ -148,7 +150,7 @@ public class PriceServiceImpl implements PriceService {
             for (Price price : priceList) {
                 Row row = sheet.createRow(rowNum++);
                 row.createCell(FIRST_COLUMN_NUM).setCellValue(price.getCheckedDate().toString());
-                row.createCell(SECOND_COLUMN_NUM).setCellValue(price.getPrice().doubleValue());
+                row.createCell(SECOND_COLUMN_NUM).setCellValue(price.getPrice().toString());
             }
 
             for (int i = 0; i < 2; i++) {

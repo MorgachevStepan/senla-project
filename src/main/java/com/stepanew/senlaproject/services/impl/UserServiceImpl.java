@@ -21,10 +21,12 @@ import com.stepanew.senlaproject.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
@@ -55,6 +57,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserCreatedResponseDto create(UserCreateRequestDto request) {
         User user = userCreateRequestDtoMapper.toEntity(request);
 
@@ -78,12 +81,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserUpdateMeResponseDto updateMe(UserUpdateMeRequestDto request, String email) {
         User updatedUser = getByEmail(email);
         return update(updatedUser, request);
     }
 
     @Override
+    @Transactional
     public UserUpdateMeResponseDto updateById(UserUpdateMeRequestDto request, Long id) {
         User updatedUser = getById(id);
 
@@ -91,6 +96,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserAddRoleResponseDto addAdminRole(UserAddRoleRequestDto request) {
         User updatedUser = getByEmail(request.email());
 
