@@ -65,12 +65,6 @@ public class StoreController implements StoreApi {
                 address
         );
 
-        if (response.isEmpty()) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .build();
-        }
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);

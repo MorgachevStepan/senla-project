@@ -91,10 +91,6 @@ public interface StoreApi {
                     }
             ),
             @ApiResponse(
-                    responseCode = "204",
-                    description = "Данная страница с торговыми точками пуста"
-            ),
-            @ApiResponse(
                     responseCode = "401",
                     description = "Не авторизирован",
                     content = {

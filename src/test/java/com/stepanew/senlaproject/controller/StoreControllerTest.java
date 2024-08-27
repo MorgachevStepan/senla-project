@@ -114,18 +114,6 @@ public class StoreControllerTest extends AbstractControllerTest{
                 .andExpect(content().json(objectMapper.writeValueAsString(page)));
     }
 
-    // Test 204 No Content
-    @Test
-    @WithMockUser
-    void getAllNoContentTest() throws Exception {
-        when(storeService.findAll(any(PageRequest.class), any(String.class), any(String.class))).thenReturn(Page.empty());
-
-        mockMvc.perform(get(PATH + "/")
-                        .param("pageNumber", "1")
-                        .param("pageSize", "10"))
-                .andExpect(status().isNoContent());
-    }
-
     // Test 400 Bad Request
     @Test
     @WithMockUser

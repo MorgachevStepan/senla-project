@@ -81,10 +81,6 @@ public interface CategoryApi {
                     }
             ),
             @ApiResponse(
-                    responseCode = "204",
-                    description = "Данная страница с категориями пуста"
-            ),
-            @ApiResponse(
                     responseCode = "400",
                     description = "Ошибка валидации входных данных - некоторый поля пустые или некорректные",
                     content = {

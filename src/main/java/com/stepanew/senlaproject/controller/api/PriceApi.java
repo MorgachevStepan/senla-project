@@ -30,10 +30,6 @@ public interface PriceApi {
                     )
             ),
             @ApiResponse(
-                    responseCode = "204",
-                    description = "Нет данных для создания графика"
-            ),
-            @ApiResponse(
                     responseCode = "400",
                     description = "Ошибка валидации входных данных - некоторый поля пустые",
                     content = {
@@ -76,10 +72,6 @@ public interface PriceApi {
                     )
             ),
             @ApiResponse(
-                    responseCode = "204",
-                    description = "Нет данных для создания отчёта"
-            ),
-            @ApiResponse(
                     responseCode = "400",
                     description = "Ошибка валидации входных данных - некоторый поля пустые",
                     content = {
@@ -118,10 +110,6 @@ public interface PriceApi {
                             mediaType = "image/png",
                             schema = @Schema(type = "string", format = "binary")
                     )
-            ),
-            @ApiResponse(
-                    responseCode = "204",
-                    description = "Нет данных для создания отчёта"
             ),
             @ApiResponse(
                     responseCode = "400",

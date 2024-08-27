@@ -108,21 +108,6 @@ class PriceControllerTest extends AbstractControllerTest {
                 .andExpect(content().bytes(dummyImage));
     }
 
-    //Test 204 No Content
-    @Test
-    @WithMockUser
-    void getPriceTrendNoContentTest() throws Exception {
-        when(priceService.getPriceTrend(anyLong(), anyLong(), any(LocalDateTime.class), any(LocalDateTime.class)))
-                .thenReturn(new byte[0]);
-
-        mockMvc.perform(get(PATH + "/trend")
-                        .param(PRODUCT_ID_PARAM, PRODUCT_ID_VALUE)
-                        .param(STORE_ID_PARAM, STORE_ID_VALUE)
-                        .param(START_DATE_PARAM, START_DATE_VALUE)
-                        .param(END_DATE_PARAM, END_DATE_VALUE))
-                .andExpect(status().isNoContent());
-    }
-
     //Test 400 Bad Request
     @Test
     @WithMockUser
@@ -165,21 +150,6 @@ class PriceControllerTest extends AbstractControllerTest {
                 .andExpect(header().string("Content-Disposition", "attachment; filename=\"report.xlsx\""))
                 .andExpect(content().contentType(MediaType.parseMediaType(MEDIA_TYPE_XLSX)))
                 .andExpect(content().bytes(dummyReport));
-    }
-
-    //Test 204 No Content
-    @Test
-    @WithMockUser
-    void getPriceReportNoContentTest() throws Exception {
-        when(priceService.getPriceReport(anyLong(), anyLong(), any(LocalDateTime.class), any(LocalDateTime.class)))
-                .thenReturn(new byte[0]);
-
-        mockMvc.perform(get(PATH + "/report")
-                        .param(PRODUCT_ID_PARAM, PRODUCT_ID_VALUE)
-                        .param(STORE_ID_PARAM, STORE_ID_VALUE)
-                        .param(START_DATE_PARAM, START_DATE_VALUE)
-                        .param(END_DATE_PARAM, END_DATE_VALUE))
-                .andExpect(status().isNoContent());
     }
 
     //Test 400 Bad Request
@@ -228,26 +198,6 @@ class PriceControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.IMAGE_PNG))
                 .andExpect(content().bytes(dummyImage));
-    }
-
-    //Test 204 No Content
-    @Test
-    @WithMockUser
-    void getAveragePriceByNoContentTest() throws Exception {
-        when(priceService.getAveragePriceBy(
-                anyLong(),
-                eq(ChronoUnit.DAYS),
-                any(LocalDateTime.class),
-                any(LocalDateTime.class))
-        )
-                .thenReturn(new byte[0]);
-
-        mockMvc.perform(get(PATH + "/average")
-                        .param(PRODUCT_ID_PARAM, PRODUCT_ID_VALUE)
-                        .param(AVERAGE_BY_PARAM, AVERAGE_BY_VALUE)
-                        .param(START_DATE_PARAM, START_DATE_VALUE)
-                        .param(END_DATE_PARAM, END_DATE_VALUE))
-                .andExpect(status().isNoContent());
     }
 
     //Test 400 Bad Request

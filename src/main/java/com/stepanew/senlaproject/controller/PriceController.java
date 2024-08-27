@@ -39,12 +39,6 @@ public class PriceController implements PriceApi {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
         byte[] response = priceService.getPriceTrend(productId, storeId, startDate, endDate);
 
-        if (response.length == 0) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .build();
-        }
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .contentType(MediaType.IMAGE_PNG)
@@ -59,12 +53,6 @@ public class PriceController implements PriceApi {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
         byte[] response = priceService.getPriceReport(productId, storeId, startDate, endDate);
-
-        if (response.length == 0) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .build();
-        }
 
         return ResponseEntity.ok()
                 .contentLength(response.length)
@@ -88,12 +76,6 @@ public class PriceController implements PriceApi {
                 startDate,
                 endDate
         );
-
-        if (response.length == 0) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .build();
-        }
 
         return ResponseEntity
                 .status(HttpStatus.OK)

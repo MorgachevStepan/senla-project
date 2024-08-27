@@ -152,21 +152,6 @@ class ProductControllerTest extends AbstractControllerTest {
                 .andExpect(content().json(objectMapper.writeValueAsString(page)));
     }
 
-    //Test 204 No Content
-    @Test
-    @WithMockUser
-    void findAllNoContentTest() throws Exception {
-        when(productService.findAll(any(PageRequest.class), any(String.class), anyLong())).thenReturn(Page.empty());
-
-        mockMvc.perform(get(PATH + "/")
-                        .param("pageNumber", "0")
-                        .param("pageSize", "10")
-                        .param("categoryId", Long.toString(DEFAULT_ID))
-                        .param("sortBy", "id")
-                        .param("sortDirection", "asc"))
-                .andExpect(status().isNoContent());
-    }
-
     //Test 400 Bad Request
     @Test
     @WithMockUser

@@ -113,18 +113,6 @@ public class CategoryControllerTest extends AbstractControllerTest{
                 .andExpect(content().json(objectMapper.writeValueAsString(page)));
     }
 
-    //test code 204
-    @Test
-    @WithMockUser
-    void getAllNoContentTest() throws Exception {
-        when(categoryService.findAll(any(), any())).thenReturn(Page.empty());
-
-        mockMvc.perform(get(PATH + "/")
-                        .param("pageNumber", "1")
-                        .param("pageSize", "10"))
-                .andExpect(status().isNoContent());
-    }
-
     //test code 400
     @Test
     @WithMockUser

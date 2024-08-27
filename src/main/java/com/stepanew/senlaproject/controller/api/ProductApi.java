@@ -89,10 +89,6 @@ public interface ProductApi {
                     }
             ),
             @ApiResponse(
-                    responseCode = "204",
-                    description = "Данная страница с продуктами пуста"
-            ),
-            @ApiResponse(
                     responseCode = "400",
                     description = "Ошибка валидации входных данных - некоторый поля пустые или некорректные",
                     content = {

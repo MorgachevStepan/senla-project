@@ -62,12 +62,6 @@ public class CategoryController implements CategoryApi {
                 name
         );
 
-        if (response.isEmpty()) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .build();
-        }
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);

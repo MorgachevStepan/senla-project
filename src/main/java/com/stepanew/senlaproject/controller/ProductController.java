@@ -73,13 +73,6 @@ public class ProductController implements ProductApi {
                 categoryId
         );
 
-
-        if (response.isEmpty()) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .build();
-        }
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);
