@@ -3,11 +3,10 @@ package com.stepanew.senlaproject.controller;
 import com.stepanew.senlaproject.controller.api.ProductApi;
 import com.stepanew.senlaproject.domain.dto.request.PriceCreateRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductCreateRequestDto;
+import com.stepanew.senlaproject.domain.dto.request.ProductGetAllByCategoryRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.ProductUpdateRequestDto;
 import com.stepanew.senlaproject.domain.dto.response.ProductResponseDto;
 import com.stepanew.senlaproject.services.ProductService;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -43,32 +42,17 @@ public class ProductController implements ProductApi {
     @GetMapping("/")
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<?> getAllByCategory(
-            @RequestParam(defaultValue = "0")
-            @Min(value = 0L, message = "Page number can't be less than 0")
-            Integer pageNumber,
-            @RequestParam(defaultValue = "10")
-            @Min(value = 1L, message = "Page limit can't be less than 1")
-            Integer pageSize,
-            @RequestParam()
-            @Min(value = 1L, message = "CategoryID can't be less than 1")
-            Long categoryId,
-            @RequestParam(required = false, defaultValue = "") String name,
-            @RequestParam(required = false, defaultValue = "id")
-            @Pattern(regexp = "(?i)id|name", message = "sortBy must be one of: id, name")
-            String sortBy,
-            @RequestParam(required = false, defaultValue = "ASC")
-            @Pattern(regexp = "(?i)asc|desc", message = "sortDirection must be one of: asc, desc")
-            String sortDirection
+            @Validated ProductGetAllByCategoryRequestDto request
     ) {
         Page<ProductResponseDto> response = productService.findAll(
                 PageRequest.of(
-                        pageNumber,
-                        pageSize,
-                        Sort.Direction.valueOf(sortDirection.toUpperCase()),
-                        sortBy.toLowerCase()
+                        request.getPageNumber(),
+                        request.getPageSize(),
+                        Sort.Direction.valueOf(request.getSortDirection().toUpperCase()),
+                        request.getSortBy().toLowerCase()
                 ),
-                name,
-                categoryId
+                request.getName(),
+                request.getCategoryId()
         );
 
         return ResponseEntity

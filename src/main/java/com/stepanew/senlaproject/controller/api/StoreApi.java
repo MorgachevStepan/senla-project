@@ -1,6 +1,7 @@
 package com.stepanew.senlaproject.controller.api;
 
 import com.stepanew.senlaproject.domain.dto.request.StoreCreateRequestDto;
+import com.stepanew.senlaproject.domain.dto.request.StoreGetAllRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.StoreUpdateRequestDto;
 import com.stepanew.senlaproject.domain.dto.response.StoreResponseDto;
 import com.stepanew.senlaproject.exceptions.message.ErrorMessage;
@@ -12,8 +13,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Pattern;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -103,22 +102,7 @@ public interface StoreApi {
     })
     @Operation(summary = "Получение всех торговых точек с пагинацией и фильтрацией")
     ResponseEntity<?> getAll(
-            @Parameter(description = "Номер страницы", example = "1")
-            @Min(value = 0L, message = "Page number can't be less than 0")
-            Integer pageNumber,
-            @Parameter(description = "Размер страницы", example = "10")
-            @Min(value = 1L, message = "Page limit can't be less than 1")
-            Integer pageSize,
-            @Parameter(description = "Название торговой точки", example = "")
-            String name,
-            @Parameter(description = "Адрес торговой точки", example = "")
-            String address,
-            @Parameter(description = "Сортировка по параметру (id, name, address)", example = "id")
-            @Pattern(regexp = "(?i)id|name|address", message = "sortBy must be one of: id, name, address")
-            String sortBy,
-            @Parameter(description = "Направление сортировки (asc, desc)", example = "asc")
-            @Pattern(regexp = "(?i)asc|desc", message = "sortDirection must be one of: asc, desc")
-            String sortDirection
+            @Validated StoreGetAllRequestDto request
     );
 
     @ApiResponses(value = {

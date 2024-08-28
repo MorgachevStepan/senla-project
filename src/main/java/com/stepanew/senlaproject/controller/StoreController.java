@@ -3,11 +3,10 @@ package com.stepanew.senlaproject.controller;
 
 import com.stepanew.senlaproject.controller.api.StoreApi;
 import com.stepanew.senlaproject.domain.dto.request.StoreCreateRequestDto;
+import com.stepanew.senlaproject.domain.dto.request.StoreGetAllRequestDto;
 import com.stepanew.senlaproject.domain.dto.request.StoreUpdateRequestDto;
 import com.stepanew.senlaproject.domain.dto.response.StoreResponseDto;
 import com.stepanew.senlaproject.services.StoreService;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,30 +38,17 @@ public class StoreController implements StoreApi {
     @GetMapping("/")
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<?> getAll(
-            @RequestParam(defaultValue = "0")
-            @Min(value = 0L, message = "Page number can't be less than 0")
-            Integer pageNumber,
-            @RequestParam(defaultValue = "10")
-            @Min(value = 1L, message = "Page limit can't be less than 1")
-            Integer pageSize,
-            @RequestParam(required = false, defaultValue = "") String name,
-            @RequestParam(required = false, defaultValue = "") String address,
-            @RequestParam(required = false, defaultValue = "id")
-            @Pattern(regexp = "(?i)id|name|address", message = "sortBy must be one of: id, name, address")
-            String sortBy,
-            @RequestParam(required = false, defaultValue = "ASC")
-            @Pattern(regexp = "(?i)asc|desc", message = "sortDirection must be one of: asc, desc")
-            String sortDirection
-    ) {
+            @Validated StoreGetAllRequestDto request
+            ) {
         Page<StoreResponseDto> response = storeService.findAll(
                 PageRequest.of(
-                        pageNumber,
-                        pageSize,
-                        Sort.Direction.valueOf(sortDirection.toUpperCase()),
-                        sortBy.toLowerCase()
+                        request.getPageNumber(),
+                        request.getPageSize(),
+                        Sort.Direction.valueOf(request.getSortDirection().toUpperCase()),
+                request.getSortBy().toLowerCase()
                 ),
-                name,
-                address
+                request.getName(),
+                request.getAddress()
         );
 
         return ResponseEntity
