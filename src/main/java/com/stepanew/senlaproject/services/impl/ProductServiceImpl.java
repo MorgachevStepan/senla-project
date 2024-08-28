@@ -31,7 +31,10 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 @Service
@@ -162,28 +165,27 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void uploadProducts(MultipartFile file, String email) {
-        List<Product> products = new ArrayList<>();
+        List<Product> products = Collections.synchronizedList(new ArrayList<>());
 
         try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
             Sheet sheet = workbook.getSheetAt(0);
-            for (Row row : sheet) {
-                if (row.getRowNum() == 0) {
-                    continue;
-                }
 
-                Category category = categoryRepository
-                        .findById((long) row.getCell(2).getNumericCellValue())
-                        .orElseThrow(CategoryException.CODE.NO_SUCH_CATEGORY::get);
+            StreamSupport.stream(sheet.spliterator(), true)
+                    .skip(1)
+                    .parallel()
+                    .forEach(row -> {
+                        Category category = categoryRepository
+                                .findById((long) row.getCell(2).getNumericCellValue())
+                                .orElseThrow(CategoryException.CODE.NO_SUCH_CATEGORY::get);
 
-                Product product = Product
-                        .builder()
-                        .name(row.getCell(0).getStringCellValue())
-                        .description(row.getCell(1).getStringCellValue())
-                        .category(category)
-                        .build();
+                        Product product = Product.builder()
+                                .name(row.getCell(0).getStringCellValue())
+                                .description(row.getCell(1).getStringCellValue())
+                                .category(category)
+                                .build();
 
-                products.add(product);
-            }
+                        products.add(product);
+                    });
 
             List<Product> savedProducts = productRepository.saveAll(products);
             logUsersActionBatch(email, savedProducts, ActionType.ADDED);
@@ -197,33 +199,34 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
+
     @Override
     @Transactional
     public void uploadPrices(MultipartFile file, String email) {
-        List<Price> prices = new ArrayList<>();
-        List<Product> products = new ArrayList<>();
+        List<Price> prices = Collections.synchronizedList(new ArrayList<>());
+        List<Product> products = Collections.synchronizedList(new ArrayList<>());
 
         try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
             Sheet sheet = workbook.getSheetAt(0);
-            for (Row row : sheet) {
-                if (row.getRowNum() == 0) {
-                    continue;
-                }
 
-                PriceCreateRequestDto request = getPriceCreateRequestDtoFromRow(row);
+            StreamSupport.stream(sheet.spliterator(), true)
+                    .skip(1)
+                    .parallel()
+                    .forEach(row -> {
+                        PriceCreateRequestDto request = getPriceCreateRequestDtoFromRow(row);
 
-                Price price = priceCreateRequestDtoMapper.toEntity(request);
-                Product product = findProductById(request.productId());
-                Store store = storeRepository.findById(request.storeId())
-                        .orElseThrow(StoreException.CODE.NO_SUCH_STORE::get);
+                        Price price = priceCreateRequestDtoMapper.toEntity(request);
+                        Product product = findProductById(request.productId());
+                        Store store = storeRepository.findById(request.storeId())
+                                .orElseThrow(StoreException.CODE.NO_SUCH_STORE::get);
 
-                price.setProduct(product);
-                price.setStore(store);
-                price.setCheckedDate(LocalDateTime.now());
+                        price.setProduct(product);
+                        price.setStore(store);
+                        price.setCheckedDate(LocalDateTime.now());
 
-                products.add(product);
-                prices.add(price);
-            }
+                        products.add(product);
+                        prices.add(price);
+                    });
 
             logUsersActionBatch(email, products, ActionType.NEW_PRICED);
             priceRepository.saveAll(prices);
@@ -261,19 +264,17 @@ public class ProductServiceImpl implements ProductService {
     private void logUsersActionBatch(String email, List<Product> products, ActionType actionType) {
         User user = getUserByEmail(email);
 
-        List<UserProductsAction> result = new ArrayList<>();
-
-        for (Product product: products) {
-            result.add(UserProductsAction
-                    .builder()
-                    .email(user.getEmail())
-                    .product(product.getName())
-                    .actionType(actionType)
-                    .build());
-        }
+        List<UserProductsAction> result = products.parallelStream()
+                .map(product -> UserProductsAction.builder()
+                        .email(user.getEmail())
+                        .product(product.getName())
+                        .actionType(actionType)
+                        .build())
+                .collect(Collectors.toList());
 
         userProductsActionRepository.saveAll(result);
     }
+
 
     private User getUserByEmail(String email) {
         return userRepository
