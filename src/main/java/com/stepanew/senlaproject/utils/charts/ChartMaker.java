@@ -1,10 +1,10 @@
 package com.stepanew.senlaproject.utils.charts;
 
-
 import com.stepanew.senlaproject.exceptions.ChartException;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
@@ -55,11 +55,12 @@ public abstract class ChartMaker<T> {
                 O_Y_NAME,
                 dataset,
                 PlotOrientation.VERTICAL,
-                false,
-                true,
-                false
+                false,  // Легенда
+                true,   // Tooltips
+                false   // URLs
         );
 
+        lineChart.getCategoryPlot().getDomainAxis().setCategoryLabelPositions(CategoryLabelPositions.UP_45);
         lineChart.getTitle().setFont(new Font(FONT, Font.BOLD, TITLE_SIZE));
         lineChart.getCategoryPlot().getDomainAxis().setLabelFont(new Font(FONT, Font.PLAIN, NORMAL_SIZE));
         lineChart.getCategoryPlot().getRangeAxis().setLabelFont(new Font(FONT, Font.PLAIN, NORMAL_SIZE));
